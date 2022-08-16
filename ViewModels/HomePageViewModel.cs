@@ -168,7 +168,7 @@ namespace ViewModels
         [RelayCommand]
         private Task AdvanceDownload()
         {
-            return Navigator.NavigateAsync(AppPages.LoadingPage.Module, new AppNavigationData() { SupressNavigationAnimation = true });
+            return Navigator.NavigateAsync(AppPages.AdvancedDownloadPage.Module);
         }
 
         [RelayCommand]
