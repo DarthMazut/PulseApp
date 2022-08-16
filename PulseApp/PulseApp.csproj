@@ -72,6 +72,7 @@
     <None Remove="Converters\ConvertersDictionary.xaml" />
     <None Remove="Dialogs\EnterNameDialog.xaml" />
     <None Remove="Pages\AboutPage.xaml" />
+    <None Remove="Pages\ArchivePage.xaml" />
     <None Remove="Pages\HomePage.xaml" />
     <None Remove="Pages\LoadingPage.xaml" />
     <None Remove="Pages\QuickDownloadSummaryPage.xaml" />
@@ -115,6 +116,11 @@
     <Reference Include="MochaCoreWinUI">
       <HintPath>..\..\..\Testowe\MochaLibrary\MochaCoreWinUI\bin\Debug\net6.0-windows10.0.19041.0\MochaCoreWinUI.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Pages\ArchivePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Pages\LoadingPage.xaml">

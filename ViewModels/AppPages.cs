@@ -22,6 +22,10 @@ namespace ViewModels
         public static PageInfo SettingsPage { get; } = new("SettingsPage");
 
         public static PageInfo VideoFormatSelectionPage { get; } = new("VideoFormatSelectionPage");
+
+        public static PageInfo ArchivePage { get; } = new("ArchivePage");
+
+        public static PageInfo AdvancedDownloadPage { get; } = new("AdvancedDownload");
     }
 
     public class PageInfo

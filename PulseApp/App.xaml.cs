@@ -83,6 +83,7 @@ namespace PulseApp
             NavigationManager.AddModule(AppPages.QuickDownloadSummaryPage.Id, () => new NavigationModule(new QuickDownloadSummaryPage()));
             NavigationManager.AddModule(AppPages.SettingsPage.Id, () => new NavigationModule(new SettingsPage()));
             NavigationManager.AddModule(AppPages.VideoFormatSelectionPage.Id, () => new NavigationModule(new VideoFormatSelectionPage()));
+            NavigationManager.AddModule(AppPages.ArchivePage.Id, () => new NavigationModule(new ArchivePage()));
 
             DialogManager.DefineDialog("OpenFolderDialog", () => new BrowseFolderDialogModule(_mainWindow));
             DialogManager.DefineDialog("OpenFileDialog", () => new OpenFileDialogModule(_mainWindow));

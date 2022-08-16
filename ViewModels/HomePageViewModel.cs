@@ -168,14 +168,13 @@ namespace ViewModels
         [RelayCommand]
         private Task AdvanceDownload()
         {
-            // TODO: Dodać stronę w budowie ;)
-            return Task.CompletedTask;
+            return Navigator.NavigateAsync(AppPages.LoadingPage.Module, new AppNavigationData() { SupressNavigationAnimation = true });
         }
 
         [RelayCommand]
         private Task Archive()
         {
-            return Navigator.NavigateAsync(AppPages.LoadingPage.Module, new AppNavigationData() { SupressNavigationAnimation = true });
+            return Navigator.NavigateAsync(AppPages.ArchivePage.Module);
         }
 
         [RelayCommand]
