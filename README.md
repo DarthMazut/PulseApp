@@ -5,14 +5,22 @@ Download your favourite video and music for free, with intuitive UI experience.
 ![Application home page screenshot](./AppScreen.JPG)
 
 ## Current development status
-The app is about 7 MD from first pre-release. The following tasks needs to be done:
- - [ ] Download Page
- - [ ] Path for ffmpeg
- - [ ] WIP for Archive and Advanced download
- - [ ] Report bug link
- - [ ] Logging
- - [ ] App Icons
- - [ ] Distribution
+The following items are planned to be included in the next release:
+
+ - [ ] Download Page (2 MD)
+ - [ ] Path for ffmpeg (1 MD)
+ - [x] WIP for Archive and Advanced download  (0.5 MD)
+ - [x] Report bug link (1 MD)
+ - [ ] Logging (1 MD)
+ - [ ] App Icons (0.5 MD)
+ - [ ] Distribution (1 MD)
+
+
+**Completion percentage:**  
+![21%](https://progress-bar.dev/21/)
+
+**ETA:**  
+23.08.2022 (5.5 MD)
 
 ## How to contribute?
 At the moment you cannot build _Pulse App_ localy, because it uses local dependencies, but it will change in the future. If you'd like to help to improve _Pulse App_ please report any bugs or improvements ideas by creating issues.
