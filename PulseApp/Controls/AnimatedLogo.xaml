@@ -1,0 +1,110 @@
+﻿<UserControl
+    x:Name="thisControl"
+    x:Class="PulseApp.Controls.AnimatedLogo"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PulseApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid DataContext="{Binding ElementName=thisControl}">
+        <Border x:Name="xe_Border" Opacity="0" Width="120" Height="120" CornerRadius="60">
+            <Border.Background>
+                <RadialGradientBrush x:Name="GradientBrush">
+                    <GradientStop x:Name="xe_LightningGradientStop" Offset="0" />
+                    <GradientStop x:Name="xe_BackgroundGradientStop" Offset="1" />
+                </RadialGradientBrush>
+            </Border.Background>
+            <Border.Triggers>
+                <EventTrigger RoutedEvent="Rectangle.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="xe_Border" Storyboard.TargetProperty="Opacity" RepeatBehavior="Forever" FillBehavior="HoldEnd" Duration="0:0:17">
+                                <EasingDoubleKeyFrame KeyTime="0:0:3" Value="1"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:7" Value="1" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:7.5" Value="0.5" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:8" Value="1" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:8.5" Value="0.5" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:9" Value="1" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:9.5" Value="0.5" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:10" Value="1" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:14" Value="0" />
+                                <EasingDoubleKeyFrame KeyTime="0:0:17" Value="0" />
+                            </DoubleAnimationUsingKeyFrames>
+                            
+                            <!--<DoubleAnimation
+                                Storyboard.TargetName="xe_Border"
+                                Storyboard.TargetProperty="Opacity"
+                                To="0" Duration="0:0:6"
+                                RepeatBehavior="Forever" AutoReverse="True">
+                                <DoubleAnimation.EasingFunction>
+                                    <BounceEase EasingMode="EaseOut"/>
+                                </DoubleAnimation.EasingFunction>
+                            </DoubleAnimation>-->
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Border.Triggers>
+        </Border>
+        <Image x:Name="xe_Image" Grid.Column="1" Source="/Assets/AtomIcon.png" Stretch="Uniform" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Image.RenderTransform>
+                <RotateTransform x:Name="xe_ImageRotate" CenterX="40" CenterY="40" />
+            </Image.RenderTransform>
+            <Image.Triggers>
+                <EventTrigger RoutedEvent="Image.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                Storyboard.TargetName="xe_ImageRotate"
+                                Storyboard.TargetProperty="Angle"
+                                To="360" Duration="0:0:12"
+                                RepeatBehavior="Forever">
+                            </DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Image.Triggers>
+        </Image>
+    </Grid>
+    
+    <!--<Border x:Name="xe_Border" Width="120" Height="120" CornerRadius="60">
+        <Border.Background>
+            <RadialGradientBrush x:Name="GradientBrush">
+                <GradientStop x:Name="GradientStop" Color="DodgerBlue" Offset="0.5" />
+                <GradientStop Color="#202020" Offset="1" />
+            </RadialGradientBrush>
+        </Border.Background>
+        <Border.Triggers>
+            <EventTrigger RoutedEvent="Rectangle.Loaded">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation
+                                Storyboard.TargetName="xe_Border"
+                                Storyboard.TargetProperty="Opacity"
+                                To="0" Duration="0:0:6"
+                                RepeatBehavior="Forever" AutoReverse="True">
+                            <DoubleAnimation.EasingFunction>
+                                <BounceEase EasingMode="EaseOut"/>
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                        <DoubleAnimation
+                                Storyboard.TargetName="xe_ImageRotate"
+                                Storyboard.TargetProperty="Angle"
+                                To="360" Duration="0:0:12"
+                                RepeatBehavior="Forever">
+                        </DoubleAnimation>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Border.Triggers>
+
+        <Image x:Name="xe_Image" Grid.Column="1" Source="/Assets/AtomIcon.png" Stretch="Uniform" Width="80" Height="80" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Image.RenderTransform>
+                <RotateTransform x:Name="xe_ImageRotate" CenterX="40" CenterY="40" />
+            </Image.RenderTransform>
+        </Image>
+
+    </Border>-->
+
+</UserControl>

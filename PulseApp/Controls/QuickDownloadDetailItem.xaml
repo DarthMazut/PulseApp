@@ -1,0 +1,64 @@
+﻿<UserControl
+    x:Name="thisControl"
+    x:Class="PulseApp.Controls.QuickDownloadDetailItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PulseApp.Controls"
+    xmlns:converters="using:PulseApp.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
+
+        <Style x:Key="ItemStyle" TargetType="Grid">
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="{ThemeResource SystemAccentColor}" />
+            <Setter Property="MinHeight" Value="50" />
+        </Style>
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="ValueStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="Margin" Value="0,0,30,0" />
+        </Style>
+        <Style x:Key="HyperlinkStyle" TargetType="HyperlinkButton" BasedOn="{StaticResource DateTimePickerFlyoutLoopingSelectorNavigationButtonStyle}">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="FontSize" Value="18" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid DataContext="{Binding ElementName=thisControl}" Background="{Binding Background}" Style="{StaticResource ItemStyle}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="175" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{Binding HeaderText}" Style="{StaticResource HeaderStyle}"/>
+        <RelativePanel Grid.Column="2" VerticalAlignment="Center">
+            <TextBlock x:Name="xe_ValueTextBox" Text="{Binding ValueText}" Visibility="{Binding HyperlinkUri, Converter={StaticResource NullableToVisibilityConverter}, ConverterParameter=Negate}" Style="{StaticResource ValueStyle}"/>
+            <HyperlinkButton Content="{Binding ValueText}" NavigateUri="{Binding HyperlinkUri}" Visibility="{Binding HyperlinkUri, Converter={StaticResource NullableToVisibilityConverter}}" Style="{StaticResource HyperlinkStyle}"/>
+            <FontIcon
+                RelativePanel.RightOf="xe_ValueTextBox"
+                RelativePanel.AlignVerticalCenterWith="xe_ValueTextBox"
+                Margin="-25,0,0,0"
+                Glyph="&#xE946;" 
+                Visibility="{Binding ValueHintText, Converter={StaticResource NullableToVisibilityConverter}}" 
+                Foreground="{ThemeResource InfoBarInformationalSeverityIconBackground}" 
+                ToolTipService.ToolTip="{Binding ValueHintText}"
+                />
+        </RelativePanel>
+        <Button Grid.Column="3" Visibility="{Binding ActionButtonIcon, Converter={StaticResource NullableToVisibilityConverter}}"  Command="{Binding ActionButtonCommand}">
+            <FontIcon Glyph="{Binding ActionButtonIcon}"/>
+        </Button>
+    </Grid>
+</UserControl>

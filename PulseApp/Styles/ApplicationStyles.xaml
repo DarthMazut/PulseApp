@@ -1,0 +1,22 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PulseApp.Styles">
+
+    <ResourceDictionary.ThemeDictionaries>
+        <!-- DARK -->
+        <ResourceDictionary x:Key="Default">
+            <Color x:Key="PulseDefaultForegroundColor">White</Color>
+            <Color x:Key="PulseTitleBarBackground">#4d4d4d</Color>
+            <Color x:Key="PulseAppBackgroundColor">#202020</Color>
+        </ResourceDictionary>
+
+        <!-- LIGHT -->
+        <ResourceDictionary x:Key="Light">
+            <Color x:Key="PulseDefaultForegroundColor">Black</Color>
+            <Color x:Key="PulseTitleBarBackground">#c2c2c2</Color>
+            <Color x:Key="PulseAppBackgroundColor">#F3F3F3</Color>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+</ResourceDictionary>

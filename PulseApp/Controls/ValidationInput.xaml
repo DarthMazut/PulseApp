@@ -1,0 +1,68 @@
+﻿<UserControl
+    x:Name="thisControl"
+    x:Class="PulseApp.Controls.ValidationInput"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PulseApp.Controls"
+    xmlns:converters="using:PulseApp.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="HeaderStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style x:Key="ErrorTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlErrorTextForegroundBrush}" />
+            <Setter Property="Margin" Value="0,7,0,0" />
+        </Style>
+    </UserControl.Resources>
+    
+    <StackPanel DataContext="{Binding ElementName=thisControl}" Spacing="15">
+        <!-- VISUAL STATES -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="Error">
+                    <VisualState.Setters>
+                        <Setter Target="xe_ErrorTextBlock.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="xe_ErrorTextBlockTransform" Storyboard.TargetProperty="Y" Duration="0:0:0.5" From="-15">
+                            <DoubleAnimation.EasingFunction>
+                                <CircleEase EasingMode="EaseOut" />
+                            </DoubleAnimation.EasingFunction>
+                        </DoubleAnimation>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!-- HEADER -->
+        <TextBlock Text="{Binding HeaderText}" Style="{StaticResource HeaderStyle}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" MinHeight="25"/>
+            </Grid.RowDefinitions>
+            <!-- TEXT BOX-->
+            <TextBox x:Name="xe_TextBox" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <!-- RIGHT BUTTON-->
+            <Button Grid.Column="1" Command="{Binding ButtonCommand}" Visibility="{Binding IsButtonVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <FontIcon Glyph="{Binding ButtonGlyph}"/>
+            </Button>
+            <!-- ERROR TEXT -->
+            <TextBlock x:Name="xe_ErrorTextBlock" Grid.Row="1" Text="{Binding ErrorText}" Visibility="Collapsed" Style="{StaticResource ErrorTextStyle}">
+                <TextBlock.RenderTransform>
+                    <TranslateTransform x:Name="xe_ErrorTextBlockTransform"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </Grid>
+    </StackPanel>
+</UserControl>

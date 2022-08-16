@@ -1,0 +1,251 @@
+﻿<Page
+    x:Class="PulseApp.Pages.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PulseApp.Pages"
+    xmlns:controls="using:PulseApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:viewmodels="using:ViewModels" 
+    xmlns:converters="using:PulseApp.Converters"
+    xmlns:i="using:Microsoft.Xaml.Interactivity" 
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:media="using:Microsoft.Xaml.Interactions.Media" 
+    xmlns:utils="using:PulseApp.Utils"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <viewmodels:HomePageViewModel />
+    </Page.DataContext>
+
+    <Page.Resources>
+        <!-- CONVERTERS -->
+        <converters:ValidationTextBoxStateConverter x:Key="TextBoxStateConverter" />
+        <converters:NegationConverter x:Key="NegationConverter" />
+
+        <!-- STYLES -->
+        <Style x:Key="TransitionButtonStyle" TargetType="controls:TransitionButton">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Height" Value="275" />
+            <Setter Property="Margin" Value="30" />
+        </Style>
+        <Style x:Key="TransitionButtonStyleSmall" TargetType="controls:TransitionButton">
+            <Setter Property="Width" Value="275" />
+            <Setter Property="Height" Value="135" />
+            <Setter Property="Margin" Value="15" />
+        </Style>
+        <Style x:Key="InfoBarStyle" TargetType="InfoBar">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="MaxWidth" Value="850" />
+            <Setter Property="Margin" Value="0,10,0,0" />
+            <Setter Property="Transitions">
+                <Setter.Value>
+                    <TransitionCollection>
+                        <RepositionThemeTransition />
+                    </TransitionCollection>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- STARTING ANIMATION -->
+        <Storyboard x:Key="LoadingStoryboard">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="xe_ButtonsGrid" Storyboard.TargetProperty="Opacity" Duration="0:0:0.90">
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0.40" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.90" Value="1" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="xe_SearchBarGrid" Storyboard.TargetProperty="Opacity" Duration="0:0:1.00">
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0.50" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:1.00" Value="1" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="xe_HeaderTextBlock" Storyboard.TargetProperty="Opacity" Duration="0:0:1.10">
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0.60" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:1.10" Value="1" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="xe_DescTextBlock" Storyboard.TargetProperty="Opacity" Duration="0:0:1.20">
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0.70" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:1.20" Value="1" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="xe_FooterTextBlock" Storyboard.TargetProperty="Opacity" Duration="0:0:1.30">
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+                <DiscreteDoubleKeyFrame KeyTime="0:0:0.80" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="0:0:1.30" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+
+            <DoubleAnimation Storyboard.TargetName="xe_LogoTranslation" Storyboard.TargetProperty="X" Duration="0:0:0.40" From="440"/>
+            <DoubleAnimation Storyboard.TargetName="xe_LogoTranslation" Storyboard.TargetProperty="Y" Duration="0:0:0.40" From="260"/>
+
+        </Storyboard>
+    </Page.Resources>
+
+    <Grid>
+        <!-- ADAPTIVE TRIGGERS -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <!-- LARGE -->
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1085"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+                <!-- MEDIUM -->
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="565"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="xe_ButtonsGrid.MaximumRowsOrColumns" Value="2"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <!-- SMALL -->
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="xe_AdvanceDownloadButton.Style" Value="{StaticResource TransitionButtonStyleSmall}"/>
+                        <Setter Target="xe_ArchiveButton.Style" Value="{StaticResource TransitionButtonStyleSmall}"/>
+                        <Setter Target="xe_SettingsButton.Style" Value="{StaticResource TransitionButtonStyleSmall}"/>
+                        <Setter Target="xe_AboutButton.Style" Value="{StaticResource TransitionButtonStyleSmall}"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <utils:AnimationHelper.AnimationPlayer>
+            <utils:AnimationPlayer Binding="{Binding AnimationController.Binding}" Animation="{StaticResource LoadingStoryboard}"/>
+        </utils:AnimationHelper.AnimationPlayer>
+
+        <ScrollViewer VerticalAlignment="Center" HorizontalScrollBarVisibility="Disabled" HorizontalScrollMode="Disabled">
+            <Grid Padding="20" MaxWidth="1250" HorizontalAlignment="Center">
+                <Grid.ChildrenTransitions>
+                    <RepositionThemeTransition />
+                </Grid.ChildrenTransitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- LOGO, TITLE, DESC -->
+                <Grid Margin="30,0,30,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <controls:AnimatedLogo x:Name="xe_LogoIcon" Grid.RowSpan="2" BackgroundColor="{ThemeResource PulseAppBackgroundColor}" VerticalAlignment="Center" Margin="0,0,10,0">
+                        <controls:AnimatedLogo.RenderTransform>
+                            <TransformGroup>
+                                <TranslateTransform x:Name="xe_LogoTranslation" />
+                            </TransformGroup>
+                        </controls:AnimatedLogo.RenderTransform>
+                    </controls:AnimatedLogo>
+                    <TextBlock x:Name="xe_HeaderTextBlock" Grid.Column="1" VerticalAlignment="Bottom" Text="Welcome to Pulse App" FontSize="44" FontFamily="Segoe Print" TextTrimming="CharacterEllipsis" />
+                    <TextBlock x:Name="xe_DescTextBlock" Grid.Column="1" VerticalAlignment="Top" Grid.Row="1" Text="Download your favourite video and music for free, with intuitive UI experience." FontSize="18" FontFamily="Segoe Print" FontStyle="Italic" TextWrapping="WrapWholeWords"/>
+                </Grid>
+
+                <!-- SEARCH BAR -->
+                <Grid x:Name="xe_SearchBarGrid" Grid.Row="1" Margin="30,50,30,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" MinHeight="60" />
+                    </Grid.RowDefinitions>
+                    <controls:ValidationTextBox
+                        MaxWidth="975"
+                        IsEnabled="{Binding AreDependenciesAvailable}"
+                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                        State="{Binding SearchState, Converter={StaticResource TextBoxStateConverter}}" 
+                        ErrorHint="{Binding ErrorHintMessage}"/>
+
+                    <InfoBar
+                        Grid.Row="1" 
+                        Style="{StaticResource InfoBarStyle}"
+                        IsOpen="{Binding IsAbortButtonVisible, Mode=TwoWay}"
+                        Severity="Warning"
+                        Title="Warning!"
+                        IsClosable="{Binding IsAbortButtonEnabled, Converter={StaticResource NegationConverter}}"
+                        Message="Operation is taking longer than expected.">
+                        <InfoBar.ActionButton>
+                            <Button Content="Abort" Command="{Binding AbortCommand}" IsEnabled="{Binding IsAbortButtonEnabled}" />
+                        </InfoBar.ActionButton>
+                    </InfoBar>
+
+                    <InfoBar
+                        Grid.Row="1" 
+                        Style="{StaticResource InfoBarStyle}"
+                        IsOpen="{Binding IsErrorPromptVisible, Mode=TwoWay}"
+                        Severity="Error"
+                        Title="Warning!"
+                        IsClosable="True"
+                        Message="Operation has been aborted due to security reasons. Please contact app provider for details.">
+                    </InfoBar>
+
+                    <InfoBar
+                        Grid.Row="1"
+                        Style="{StaticResource InfoBarStyle}"
+                        IsOpen="{Binding IsSetupRequiredVisible}"
+                        Severity="Warning"
+                        IsClosable="False"
+                        Title="Action required!"
+                        Message="In order for our app to work properly we need you to configure some settings.">
+                        <InfoBar.ActionButton>
+                            <Button Content="Go to settings" Command="{Binding ConfigureDependenciesCommand}" />
+                        </InfoBar.ActionButton>
+                    </InfoBar>
+                </Grid>
+
+                <!-- BUTTONS -->
+                <VariableSizedWrapGrid x:Name="xe_ButtonsGrid" Grid.Row="2" Orientation="Horizontal" MaximumRowsOrColumns="4" HorizontalAlignment="Center">
+                    <VariableSizedWrapGrid.ChildrenTransitions>
+                        <RepositionThemeTransition />
+                    </VariableSizedWrapGrid.ChildrenTransitions>
+
+                    <controls:TransitionButton
+                            x:Name="xe_AdvanceDownloadButton"
+                            Style="{StaticResource TransitionButtonStyle}"
+                            Command="{Binding AdvanceDownloadCommand}"
+                            IsEnabled="{Binding AreDependenciesAvailable}"
+                            Image="/Assets/AdvanceDownloadIcon.png"
+                            Header="Advanced download"
+                            Description="Download video and music with advanced options."/>
+
+                    <controls:TransitionButton 
+                            x:Name="xe_ArchiveButton"
+                            Style="{StaticResource TransitionButtonStyle}"
+                            Command="{Binding ArchiveCommand}"
+                            Image="/Assets/ArchiveIcon.png"
+                            Header="Archive"
+                            Description="Browse your download history."/>
+
+                    <controls:TransitionButton
+                            x:Name="xe_SettingsButton"
+                            Style="{StaticResource TransitionButtonStyle}"
+                            Command="{Binding SettingsCommand}"
+                            Image="/Assets/SettingsIcon.png"
+                            Header="Settings"
+                            Description="Settings allows you to change application settings - duh!"/>
+
+                    <controls:TransitionButton
+                            x:Name="xe_AboutButton"
+                            Style="{StaticResource TransitionButtonStyle}"
+                            Command="{Binding AboutCommand}"
+                            Image="/Assets/AboutIcon.png"
+                            Header="About"
+                            Description="About this application."/>
+
+                </VariableSizedWrapGrid>
+
+                <!-- FOOTER -->
+                <TextBlock x:Name="xe_FooterTextBlock" Grid.Row="3" Text="© 2022 Project Pulse. All rights reserved." HorizontalAlignment="Center" Margin="10"/>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

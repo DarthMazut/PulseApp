@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PulseApp (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "PulseApp (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

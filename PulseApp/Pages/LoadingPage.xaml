@@ -1,0 +1,44 @@
+﻿<Page
+    x:Class="PulseApp.Pages.LoadingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PulseApp.Pages"
+    xmlns:controls="using:PulseApp.Controls"
+    xmlns:viewModels="using:ViewModels"
+    xmlns:i="using:Microsoft.Xaml.Interactivity" 
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:media="using:Microsoft.Xaml.Interactions.Media" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.DataContext>
+        <viewModels:LoadingPageViewModel />
+    </Page.DataContext>
+
+    <i:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <media:ControlStoryboardAction ControlStoryboardOption="Play">
+                <media:ControlStoryboardAction.Storyboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="xe_Logo" Storyboard.TargetProperty="Opacity" BeginTime="0:0:0.1" Duration="0:0:0.5" To="1"/>
+                        <!--<DoubleAnimation Storyboard.TargetName="xe_LogoScale" Storyboard.TargetProperty="ScaleX" BeginTime="0:0:0.3" Duration="0:0:0.4" From="0" To="1"/>
+                        <DoubleAnimation Storyboard.TargetName="xe_LogoScale" Storyboard.TargetProperty="ScaleY" BeginTime="0:0:0.3" Duration="0:0:0.4" From="0" To="1"/>-->
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="xe_ProgressBar" Storyboard.TargetProperty="Visibility" Duration="0:0:0.2">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </media:ControlStoryboardAction.Storyboard>
+            </media:ControlStoryboardAction>
+        </core:EventTriggerBehavior>
+    </i:Interaction.Behaviors>
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <controls:AnimatedLogo x:Name="xe_Logo" BackgroundColor="{ThemeResource PulseAppBackgroundColor}" Opacity="0" Margin="0,0,0,20" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <controls:AnimatedLogo.RenderTransform>
+                <ScaleTransform x:Name="xe_LogoScale" CenterX="60" CenterY="60" />
+            </controls:AnimatedLogo.RenderTransform>
+        </controls:AnimatedLogo>
+        <ProgressBar x:Name="xe_ProgressBar" Visibility="Collapsed" Width="130" IsIndeterminate="True"/>
+    </StackPanel>
+</Page>

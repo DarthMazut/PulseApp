@@ -1,0 +1,50 @@
+﻿<ContentDialog
+    x:Class="PulseApp.Dialogs.EnterNameDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PulseApp.Dialogs"
+    xmlns:controls="using:PulseApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:dialogs="using:ViewModels.Dialogs"
+    mc:Ignorable="d">
+    <ContentDialog.DataContext>
+        <dialogs:EnterNameDialogViewModel />
+    </ContentDialog.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <controls:ValidationInput  
+            x:Name="xe_ValidationInput"
+            Width="370"
+            HeaderText="Provide name for downloading file:"
+            Text="{Binding NewNameText, Mode=TwoWay}"
+            ValidationFunction="{Binding ValidationFunction}"
+            SelectAllTextOnFocus="True"
+            />
+            
+            <TextBlock Grid.Column="2" FontSize="16" VerticalAlignment="Bottom" Margin="0,0,0,30">
+                <Run Text="."/>
+                <Run Text="{Binding DialogModule.Properties.Extension}"/>
+            </TextBlock>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5" HorizontalAlignment="Right">
+            <Button Content="Cancel" Width="100" Command="{Binding DiscardChangesCommand}"/>
+            <Button Content="Ok" Command="{Binding AcceptValueCommand}" IsEnabled="{Binding IsError, ElementName=xe_ValidationInput, Converter={StaticResource NegationConverter}}" Width="100"/>
+        </StackPanel>
+        
+    </Grid>
+</ContentDialog>

@@ -1,0 +1,73 @@
+﻿<UserControl
+    x:Name="thisControl"
+    x:Class="PulseApp.Controls.TransitionButton"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PulseApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <local:TransitionButtonOpacityConverter x:Key="OpacityConverter" />
+    </UserControl.Resources>
+
+    <Button DataContext="{Binding ElementName=thisControl}" Command="{Binding Command}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal">
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="xe_Image" Storyboard.TargetProperty="Opacity" Duration="0:0:0.25" To="1"/>
+                        <DoubleAnimation Storyboard.TargetName="xe_FontIconViewBox" Storyboard.TargetProperty="Opacity" Duration="0:0:0.25" To="1"/>
+                        <DoubleAnimation Storyboard.TargetName="xe_DescriptionGrid" Storyboard.TargetProperty="Opacity" Duration="0:0:0.25" To="0" />
+                        <DoubleAnimation Storyboard.TargetName="xe_HeaderTransform" Storyboard.TargetProperty="X" Duration="0:0:0.25" To="-50"/>
+                        <DoubleAnimation Storyboard.TargetName="xe_DescriptionTransform" Storyboard.TargetProperty="Y" Duration="0:0:0.25" To="50"/>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="xe_DescriptionGrid" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:0.25" Value="Collapsed" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Hovered">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="xe_DescriptionGrid" Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0:0:0" Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="xe_Image" Storyboard.TargetProperty="Opacity" Duration="0:0:0.25" To="0.1" />
+                        <DoubleAnimation Storyboard.TargetName="xe_FontIconViewBox" Storyboard.TargetProperty="Opacity" Duration="0:0:0.25" To="0.1" />
+                        <DoubleAnimation Storyboard.TargetName="xe_DescriptionGrid" Storyboard.TargetProperty="Opacity" Duration="0:0:0.25" To="1" />
+                        <DoubleAnimation Storyboard.TargetName="xe_HeaderTransform" Storyboard.TargetProperty="X" Duration="0:0:0.25" From="-50"/>
+                        <DoubleAnimation Storyboard.TargetName="xe_DescriptionTransform" Storyboard.TargetProperty="Y" Duration="0:0:0.25" From="50"/>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Disabled">
+                    <VisualState.Setters>
+                        <Setter Target="xe_Image.Opacity" Value="0.5" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid Margin="10" Opacity="{Binding IsEnabled, Converter={StaticResource OpacityConverter}}">
+            
+            <!-- NORMAL -->
+            <Viewbox x:Name="xe_FontIconViewBox" Child="{Binding FontIcon}" />
+            <Image x:Name="xe_Image" Source="{Binding Image}" Visibility="Collapsed" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+            <!-- HOVERED -->
+            <Grid x:Name="xe_DescriptionGrid" Visibility="Collapsed" Opacity="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="xe_Header" Text="{Binding Header}" FontSize="18" FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,0,30">
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform x:Name="xe_HeaderTransform" />
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+                <TextBlock x:Name="xe_Description" Grid.Row="1" Text="{Binding Description}" TextWrapping="WrapWholeWords" HorizontalTextAlignment="Justify">
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform x:Name="xe_DescriptionTransform" />
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
+        </Grid>
+    </Button>
+</UserControl>
