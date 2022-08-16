@@ -52,7 +52,7 @@
                 <TextBlock Text="Project Pulse" Style="{StaticResource TitleStyle}" />
                 <TextBlock Text="Download your favourite video and music for free, with intuitive UI experience." Style="{StaticResource MottoStyle}" />
                 <!-- ATOM -->
-                <controls:AnimatedLogo BackgroundColor="{ThemeResource PulseAppBackgroundColor}" Margin="25" HorizontalAlignment="Center">
+                <controls:AnimatedLogo BackgroundColor="{ThemeResource PulseAppBackgroundColor}" Margin="0,40,0,25" HorizontalAlignment="Center">
                     <controls:AnimatedLogo.ContextFlyout>
                         <MenuFlyout>
                             <MenuFlyoutItem Text="Show me more...">
@@ -77,7 +77,12 @@
                     <!-- PROJECT PAGE -->
                     <StackPanel Orientation="Horizontal" Style="{StaticResource DetailItemStackPanel}">
                         <TextBlock Text="Project page:" Style="{StaticResource DetailItemHeader}"/>
-                        <HyperlinkButton Content="www.example.com" Style="{StaticResource DetailItemHyperlinkStyle}"/>
+                        <HyperlinkButton Content="https://github.com/DarthMazut/PulseApp" NavigateUri="https://github.com/DarthMazut/PulseApp" Style="{StaticResource DetailItemHyperlinkStyle}"/>
+                    </StackPanel>
+                    <!-- REPORT BUG -->
+                    <StackPanel Orientation="Horizontal" Style="{StaticResource DetailItemStackPanel}">
+                        <TextBlock Text="Found a bug or have enhancement idea?" Style="{StaticResource DetailItemHeader}"/>
+                        <HyperlinkButton Content="Let us know!" NavigateUri="https://github.com/DarthMazut/PulseApp/issues" Style="{StaticResource DetailItemHyperlinkStyle}"/>
                     </StackPanel>
                     <!-- ICONS -->
                     <StackPanel Orientation="Horizontal" Style="{StaticResource DetailItemStackPanel}">
@@ -85,7 +90,7 @@
                         <HyperlinkButton Content="https://www.flaticon.com" NavigateUri="https://www.flaticon.com" Style="{StaticResource DetailItemHyperlinkStyle}"/>
                     </StackPanel>
                     <!-- LEGAL -->
-                    <TextBlock Text="(c) 2022 Project Pulse. All rights reserved." Style="{StaticResource DetailItemValue}"/>
+                    <TextBlock Text="© 2022 Project Pulse. All rights reserved." Margin="0,25,0,0" Style="{StaticResource DetailItemValue}"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
