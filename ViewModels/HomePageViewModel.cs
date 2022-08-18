@@ -210,7 +210,7 @@ namespace ViewModels
             AreDependenciesAvailable = settings.YtdlpPath != null && settings.FfmpegPath != null;
             if (AreDependenciesAvailable)
             {
-                _ytdlpAdapter = new YtdlpAdapter(settings.YtdlpPath!);
+                _ytdlpAdapter = new YtdlpAdapter(settings.YtdlpPath!, settings.FfmpegPath!);
             }
 
             await Task.Delay(playAnimation ? 1500 : 300); // This is for UX purpose!

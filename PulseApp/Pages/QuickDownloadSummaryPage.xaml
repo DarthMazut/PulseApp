@@ -36,7 +36,12 @@
             <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="FontSize" Value="18" />
         </Style>
-
+        <Style x:Key="DownloadButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="260" />
+            <Setter Property="Height" Value="80" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
         <!-- CONVERTERS -->
         <converters:UrlToImageSourceConverter x:Key="ImageSourceConverter" />
         <converters:RawImageToBitmapImageConverter x:Key="RawImageConverter" />
@@ -77,30 +82,24 @@
                         <Border CornerRadius="10" MaxWidth="600" Margin="20">
                             <Image Source="{Binding RawImage, Converter={StaticResource RawImageConverter}}" Stretch="Uniform" />
                         </Border>
-                        <TextBlock Text="{Binding Title}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="WrapWholeWords"/>
+                        <TextBlock Text="{Binding DownloadSummary.Title}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="WrapWholeWords"/>
                     </StackPanel>
                 </Grid>
                 
                  <!-- DETAILS TABLE -->
-                <controls:QuickDownloadDetailTable Margin="20"
-                                                   VerticalAlignment="Center"
-                                                   MediumType="{Binding MediumSelection}"
-                                                   FileSizeText="{Binding FileSize}"
-                                                   DurationText="{Binding Duration}"
-                                                   SourceFormatName="{Binding SourceFormat}"
-                                                   TargetFormatName="{Binding TargetFormat}"
-                                                   ResolutionText="{Binding Resolution}"
-                                                   RateText="{Binding Rate}"
-                                                   CodecName="{Binding Codec}"
-                                                   Link="{Binding Url}"
-                                                   OutputFolderPath="{Binding OutputDirectory}"
-                                                   OutputFileName="{Binding TargetFileName}"
-                                                   EditOutputFolderPathCommand="{Binding EditOutputFolderCommand}"
-                                                   EditOutputFileNameCommand="{Binding EditTargetFileNameCommand}"
-                                                   />
+                <controls:QuickDownloadDetailTable 
+                    Margin="20"
+                    VerticalAlignment="Center"
+                    TableData="{Binding DownloadSummary}"
+                    EditOutputFolderPathCommand="{Binding EditOutputFolderCommand}"
+                    EditOutputFileNameCommand="{Binding EditTargetFileNameCommand}"
+                    />
+                
             </VariableSizedWrapGrid>
             <!-- DOWNLOAD BUTTON -->
-            <Button x:Name="xe_DownloadButton" Grid.Row="1" Width="260" Height="80" FontSize="22" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="640,0,0,20">Download 💥</Button>
+            <Button x:Name="xe_DownloadButton" Grid.Row="1" Command="{Binding DownloadCommand}" Style="{StaticResource DownloadButtonStyle}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="640,0,0,20">
+                Download 💥
+            </Button>
         </Grid>
     </ScrollViewer>
 </Page>

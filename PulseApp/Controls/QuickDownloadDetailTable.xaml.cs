@@ -24,6 +24,7 @@ namespace PulseApp.Controls
     {
         #region DEPENDENCY PROPERTY
 
+        /*
         public static readonly DependencyProperty OutputFileNameProperty =
             DependencyProperty.Register(nameof(OutputFileName), typeof(string), typeof(QuickDownloadDetailTable), new PropertyMetadata(null));
 
@@ -56,12 +57,6 @@ namespace PulseApp.Controls
 
         public static readonly DependencyProperty MediumTypeProperty =
             DependencyProperty.Register(nameof(MediumType), typeof(MediumSelection), typeof(QuickDownloadDetailTable), new PropertyMetadata(MediumSelection.Video));
-
-        public static readonly DependencyProperty EditOutputFileNameCommandProperty =
-            DependencyProperty.Register(nameof(EditOutputFileNameCommand), typeof(ICommand), typeof(QuickDownloadDetailTable), new PropertyMetadata(null));
-
-        public static readonly DependencyProperty EditOutputFolderPathCommandProperty =
-            DependencyProperty.Register(nameof(EditOutputFolderPathCommand), typeof(ICommand), typeof(QuickDownloadDetailTable), new PropertyMetadata(null));
 
         public string OutputFileName
         {
@@ -129,6 +124,17 @@ namespace PulseApp.Controls
             set { SetValue(MediumTypeProperty, value); }
         }
 
+        */
+
+        public static readonly DependencyProperty EditOutputFileNameCommandProperty =
+            DependencyProperty.Register(nameof(EditOutputFileNameCommand), typeof(ICommand), typeof(QuickDownloadDetailTable), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty EditOutputFolderPathCommandProperty =
+            DependencyProperty.Register(nameof(EditOutputFolderPathCommand), typeof(ICommand), typeof(QuickDownloadDetailTable), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty TableDataProperty =
+            DependencyProperty.Register(nameof(TableData), typeof(QuickDownloadSummary), typeof(QuickDownloadDetailTable), new PropertyMetadata(null));
+
         public ICommand EditOutputFileNameCommand
         {
             get { return (ICommand)GetValue(EditOutputFileNameCommandProperty); }
@@ -140,6 +146,12 @@ namespace PulseApp.Controls
             get { return (ICommand)GetValue(EditOutputFolderPathCommandProperty); }
             set { SetValue(EditOutputFolderPathCommandProperty, value); }
         }
+        
+        public QuickDownloadSummary TableData
+        {
+            get { return (QuickDownloadSummary)GetValue(TableDataProperty); }
+            set { SetValue(TableDataProperty, value); }
+        }
 
         #endregion
 
@@ -147,15 +159,31 @@ namespace PulseApp.Controls
         {
             this.InitializeComponent();
         }
+    }
 
-        public Visibility IsRateVisible()
+    public class QuickDownloadDetailsTableVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, string language)
         {
-            return MediumType == MediumSelection.Music ? Visibility.Visible : Visibility.Collapsed;
+            if (value is MediumSelection mediumSelection)
+            {
+                if (parameter as string == "Music")
+                {
+                    return mediumSelection == MediumSelection.Music ? Visibility.Visible : Visibility.Collapsed;
+                }
+
+                if (parameter as string == "Video")
+                {
+                    return mediumSelection == MediumSelection.Video ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+
+            throw new ArgumentException();
         }
 
-        public Visibility IsResolutionVisible()
+        public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            return MediumType == MediumSelection.Video ? Visibility.Visible : Visibility.Collapsed;
+            throw new NotImplementedException();
         }
     }
 }

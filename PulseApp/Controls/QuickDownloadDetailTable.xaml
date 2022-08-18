@@ -8,70 +8,67 @@
     xmlns:converters="using:PulseApp.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Padding="10">
+    mc:Ignorable="d" 
+    Padding="10">
     <UserControl.Resources>
-        <Style x:Key="ItemGridStyle" TargetType="Grid">
-
-        </Style>
-
-        <converters:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:QuickDownloadDetailsTableVisibilityConverter x:Key="TableItemVisibilityConverter" />
     </UserControl.Resources>
     
     <ScrollViewer DataContext="{Binding ElementName=thisControl}" HorizontalScrollMode="Disabled">
         <StackPanel Margin="15,0,15,0">
             <controls:QuickDownloadDetailItem 
                 HeaderText="Media Type:"
-                ValueText="{Binding MediumType}"
+                ValueText="{Binding TableData.MediumSelection}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="File size:"
-                ValueText="{Binding FileSizeText}"
+                ValueText="{Binding TableData.FileSize}"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Duration:"
-                ValueText="{Binding DurationText}"
+                ValueText="{Binding TableData.Duration}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Source format:"
-                ValueText="{Binding SourceFormatName}"
+                ValueText="{Binding TableData.SourceFormat}"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Target format:"
-                ValueText="{Binding TargetFormatName}"
+                ValueText="{Binding TableData.TargetFormat}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Resolution:"
-                ValueText="{Binding ResolutionText}"
-                Visibility="{x:Bind IsResolutionVisible()}"
+                ValueText="{Binding TableData.Resolution}"
+                Visibility="{Binding TableData.MediumSelection, Converter={StaticResource TableItemVisibilityConverter}, ConverterParameter=Video}"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Sampling rate:"
-                ValueText="{Binding RateText}"
-                Visibility="{x:Bind IsRateVisible()}"
+                ValueText="{Binding TableData.Rate}"
+                Visibility="{Binding TableData.MediumSelection, Converter={StaticResource TableItemVisibilityConverter}, ConverterParameter=Music}"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Codec:"
-                ValueText="{Binding CodecName}"
+                ValueText="{Binding TableData.Codec}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Link:"
-                ValueText="{Binding Link}"
-                HyperlinkUri="{Binding Link}"
+                ValueText="{Binding TableData.Url}"
+                HyperlinkUri="{Binding TableData.Url}"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Output folder:"
-                ValueText="{Binding OutputFolderPath}"
+                ValueText="{Binding TableData.OutputDirectory}"
                 ActionButtonIcon="&#xED25;"
                 ActionButtonCommand="{Binding EditOutputFolderPathCommand}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Output file name:"
-                ValueText="{Binding OutputFileName}"
+                ValueText="{Binding TableData.TargetFileName}"
                 ActionButtonIcon="&#xE70F;"
                 ActionButtonCommand="{Binding EditOutputFileNameCommand}"
                 />

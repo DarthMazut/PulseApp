@@ -18,14 +18,17 @@ namespace Model
         private const string JSON_PROGRESS_TEMPLATE = @"[JSONDownload]{\""downloaded\"": %(progress.downloaded_bytes)s,\""total\"": %(progress.total_bytes)s,\""elapsed\"": %(progress.elapsed)s,\""speed\"": %(progress.speed)s,\""eta\"": %(progress.eta)s}";
 
         private readonly ProcessMessenger _messenger;
+        private readonly string _ffmpegPath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="YtdlpAdapter"/> class.
         /// </summary>
-        /// <param name="path">Location of *yt-dlp* executable file.</param>
-        public YtdlpAdapter(string path)
+        /// <param name="ytdlpPath">Location of *yt-dlp* executable file.</param>
+        /// <param name="ffmpegPath">Path to *FFmpeg* executable.</param>
+        public YtdlpAdapter(string ytdlpPath, string ffmpegPath)
         {
-            _messenger = new ProcessMessenger(path, Path.GetDirectoryName(path));
+            _messenger = new ProcessMessenger(ytdlpPath, Path.GetDirectoryName(ytdlpPath));
+            _ffmpegPath = ffmpegPath;
         }
 
         /// <summary>
@@ -82,18 +85,38 @@ namespace Model
             throw new YtdlpException("No response received from Yt-dlp.");
         }
 
-
+        /// <summary>
+        /// Asynchronously downloads video specified within provided <see cref="DownloadJob"/> object.
+        /// </summary>
+        /// <param name="downloadJob">Contains details of video to be downloaded.</param>
         public Task DownloadVideoAsync(DownloadJob downloadJob)
         {
-            DownloadProgressCoordinator progressCoordinator = new();
-
-            return _messenger.SendCommandAndWaitForResponseAsync(
-                CreateDownloadVideoCommand(
+            return DownloadVideoBase(downloadJob, CreateDownloadVideoCommand(
                     downloadJob.Url,
                     downloadJob.Selection.ToString(),
                     downloadJob.OutputDirectory.FullName,
-                    downloadJob.DownloadedFileName),
-                new Progress<ProcessCommandPartialOutput>(o => 
+                    downloadJob.DownloadedFileName));
+        }
+
+        /// <summary>
+        /// Asynchronously downloads audio specified within provided <see cref="DownloadJob"/> object.
+        /// </summary>
+        /// <param name="downloadJob">Contains details of audio to be downloaded.</param>
+        public Task DownloadMusicAsync(DownloadJob downloadJob)
+        {
+            return DownloadVideoBase(downloadJob, CreateDownloadMusicCommand(
+                    downloadJob.Url,
+                    downloadJob.Selection.ToString(),
+                    downloadJob.OutputDirectory.FullName,
+                    downloadJob.DownloadedFileName));
+        }
+
+        private Task DownloadVideoBase(DownloadJob downloadJob, string command)
+        {
+            DownloadProgressCoordinator progressCoordinator = new();
+
+            return _messenger.SendCommandAndWaitForResponseAsync(command,
+                new Progress<ProcessCommandPartialOutput>(o =>
                 {
                     downloadJob.ProgressCallback?.Report(progressCoordinator.ParseOutput(o));
                 }), downloadJob.CancellationToken ?? default);
@@ -106,7 +129,12 @@ namespace Model
 
         private string CreateDownloadVideoCommand(string url, string selectedFormats, string outputFolderPath, string outputFileName)
         {
-            return $"-f {selectedFormats} -o \"{Path.Combine(outputFolderPath, outputFileName)}.%(ext)s\" --newline --progress-template \"{JSON_PROGRESS_TEMPLATE}\" -- {url} ";
+            return $"-f {selectedFormats} -o \"{Path.Combine(outputFolderPath, outputFileName)}.%(ext)s\" --newline --progress-template \"{JSON_PROGRESS_TEMPLATE}\" --ffmpeg-location {_ffmpegPath} -- {url} ";
+        }
+
+        private string CreateDownloadMusicCommand(string url, string selectedFormat, string outputFolderPath, string outputFileName)
+        {
+            return $"-f {selectedFormat} -o \"{Path.Combine(outputFolderPath, outputFileName)}.%(ext)s\" --newline --progress-template \"{JSON_PROGRESS_TEMPLATE}\" --ffmpeg-location {_ffmpegPath} --audio-format mp3 -- {url} ";
         }
     }
 }

@@ -24,6 +24,10 @@ namespace ViewModels
 
         public FormatInfo? SelectedVideoFormat { get; set; }
 
+        public FormatSelection? FormatSelection { get; set; }
+
+        public QuickDownloadSummary? QuickDownloadSummary { get; set; }
+
         public Task<byte[]?> DownloadRawImageAsJpeg()
         {
             return _downloadingTask;

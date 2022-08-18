@@ -25,7 +25,9 @@ namespace ViewModels
 
         public static PageInfo ArchivePage { get; } = new("ArchivePage");
 
-        public static PageInfo AdvancedDownloadPage { get; } = new("AdvancedDownload");
+        public static PageInfo AdvancedDownloadPage { get; } = new("AdvancedDownloadPage");
+
+        public static PageInfo QuickDownloadPage { get; } = new("QuickDownloadPage");
     }
 
     public class PageInfo
