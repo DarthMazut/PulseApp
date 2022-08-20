@@ -15,6 +15,11 @@
     </Page.DataContext>
     <Page.Resources>
         <!-- STYLES -->
+        <Style x:Key="TitleTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="TextWrapping" Value="WrapWholeWords" />
+        </Style>
         <Style x:Key="DetailItemBorderStyle" TargetType="Border">
             <Setter Property="BorderThickness" Value="0,0,0,1" />
             <Setter Property="Padding" Value="5" />
@@ -82,7 +87,7 @@
                         <Border CornerRadius="10" MaxWidth="600" Margin="20">
                             <Image Source="{Binding RawImage, Converter={StaticResource RawImageConverter}}" Stretch="Uniform" />
                         </Border>
-                        <TextBlock Text="{Binding DownloadSummary.Title}" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="WrapWholeWords"/>
+                        <TextBlock Text="{Binding DownloadSummary.Title}" Style="{StaticResource TitleTextStyle}" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
                 

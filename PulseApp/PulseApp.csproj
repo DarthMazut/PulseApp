@@ -59,6 +59,7 @@
   <ItemGroup>
     <None Remove="Controls\AnimatedLogo.xaml" />
     <None Remove="Controls\CompositeFontIcon.xaml" />
+    <None Remove="Controls\DownloadParameterItem.xaml" />
     <None Remove="Controls\ExternalDependenciesSettingsTab.xaml" />
     <None Remove="Controls\GeneralSettingsTab.xaml" />
     <None Remove="Controls\LoggingSettingsTab.xaml" />
@@ -244,5 +245,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Remove="Pages\QuickDownloadPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Controls\DownloadParameterItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>
