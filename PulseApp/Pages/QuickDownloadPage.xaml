@@ -26,6 +26,7 @@
         <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="Width" Value="150" />
             <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="10" />
         </Style>
         
         <converters:RawImageToBitmapImageConverter x:Key="RawImageConverter" />
@@ -60,10 +61,11 @@
                         <Setter Target="xe_DownloadParam.(Grid.Column)" Value="2"/>
                         <Setter Target="xe_EtaParam.(Grid.Row)" Value="2"/>
                         <Setter Target="xe_EtaParam.(Grid.Column)" Value="2"/>
+                        <Setter Target="xe_ParametersTable.RowSpacing" Value="20" />
 
                         <Setter Target="Title_Progress_Space.Height" Value="30" />
                         <Setter Target="Progress_Params_Space.Height" Value="25" />
-                        <Setter Target="Params_Abort_Space.Height" Value="35" />
+                        <Setter Target="Params_Abort_Space.Height" Value="15" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -72,6 +74,7 @@
                 <VisualState x:Name="Initializing">
                     <VisualState.Setters>
                         <Setter Target="xe_StateName.Text" Value="Initializing..." />
+                        <Setter Target="xe_ProgressBar.IsIndeterminate" Value="True" />
                         <Setter Target="xe_PercentageRow.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
@@ -79,39 +82,36 @@
                 <VisualState x:Name="Merging">
                     <VisualState.Setters>
                         <Setter Target="xe_StateName.Text" Value="Merging..." />
+                        <Setter Target="xe_ProgressBar.IsIndeterminate" Value="True" />
                         <Setter Target="xe_ParametersTable.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_PercentageRow.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Cleaning">
                     <VisualState.Setters>
                         <Setter Target="xe_StateName.Text" Value="Cleaning..." />
+                        <Setter Target="xe_ProgressBar.IsIndeterminate" Value="True" />
                         <Setter Target="xe_ParametersTable.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_PercentageRow.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Finished">
                     <VisualState.Setters>
-                        <Setter Target="xe_StateName.Visibility" Value="Collapsed" />
-                        <Setter Target="xe_PercentageRow.Visibility" Value="Collapsed" />
-                        <Setter Target="xe_ProgressBar.Visibility" Value="Collapsed" />
-                        <Setter Target="xe_ParametersTable.Visibility" Value="Collapsed" />
-                        <Setter Target="xe_SummaryTextBlock.Visibility" Value="Visible" />
-                        <Setter Target="xe_AbortButton.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_FinishedBlock.Visibility" Value="Visible" />
                         <Setter Target="xe_OpenFolderButton.Visibility" Value="Visible" />
                         <Setter Target="xe_FinishButton.Visibility" Value="Visible" />
-                        <Setter Target="Progress_Params_Space.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_ProgressAndParams.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_AbortButton.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_ErrorIcon.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="Error">
                     <VisualState.Setters>
-                        <Setter Target="xe_StateName.Visibility" Value="Collapsed" />
-                        <Setter Target="xe_PercentageRow.Visibility" Value="Collapsed" />
-                        <Setter Target="xe_ProgressBar.Visibility" Value="Collapsed" />
-                        <Setter Target="xe_ParametersTable.Visibility" Value="Collapsed" />
-                        <Setter Target="xe_SummaryTextBlock.Visibility" Value="Visible" />
-                        <Setter Target="xe_AbortButton.Visibility" Value="Collapsed" />
-                        <Setter Target="xe_OpenFolderButton.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_FinishedBlock.Visibility" Value="Visible" />
                         <Setter Target="xe_FinishButton.Visibility" Value="Visible" />
-                        <Setter Target="Progress_Params_Space.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_ProgressAndParams.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_AbortButton.Visibility" Value="Collapsed" />
+                        <Setter Target="xe_SuccessIcon.Visibility" Value="Collapsed" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -127,10 +127,11 @@
         </i:Interaction.Behaviors>
 
 
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40" MaxWidth="700">
+        <StackPanel x:Name="xe_RootStackPanel" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="40" MaxWidth="700">
             <!--<StackPanel.ChildrenTransitions>
                 <ReorderThemeTransition />
             </StackPanel.ChildrenTransitions>-->
+            
             <!-- IMAGE, TITLE -->
             <StackPanel Spacing="15">
                 <Border CornerRadius="10" MaxWidth="560" HorizontalAlignment="Center">
@@ -149,49 +150,59 @@
                 </Border>
                 <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextStyle}" HorizontalAlignment="Center"/>
             </StackPanel>
+            
             <Border x:Name="Title_Progress_Space" Height="60" />
-            <!-- PROGRESS BAR -->
-            <StackPanel Spacing="5">
-                <Grid x:Name="xe_PercentageRow">
+            
+            <!-- PROGRESS BAR, PARAMETERS -->
+            <StackPanel x:Name="xe_ProgressAndParams">
+                <StackPanel Spacing="5">
+                    <Grid x:Name="xe_PercentageRow">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="1/2"/>
+                        <TextBlock Grid.Column="2" Text="50 %" />
+                    </Grid>
+                    <ProgressBar x:Name="xe_ProgressBar" Value="50"/>
+                    <TextBlock x:Name="xe_StateName" Text="Downloading..." HorizontalAlignment="Center"/>
+                </StackPanel>
+                
+                <Border x:Name="Progress_Params_Space" Height="50"/>
+                
+                <Grid x:Name="xe_ParametersTable">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" MinWidth="10"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" MinWidth="10"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="1/2"/>
-                    <TextBlock Grid.Column="2" Text="50 %" />
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ChildrenTransitions>
+                        <ReorderThemeTransition />
+                    </Grid.ChildrenTransitions>
+                    <controls:DownloadParameterItem x:Name="xe_SpeedParam" Icon="&#xEC4A;" Header="Speed:" Text="12.42 MB/s" VerticalAlignment="Center" MaxWidth="150"/>
+                    <controls:DownloadParameterItem x:Name="xe_DownloadParam" Grid.Column="2" Icon="&#xE896;" Header="Downloaded:" Text="252.42 MB / 1.24 GB" VerticalAlignment="Center" MaxWidth="150"/>
+                    <controls:DownloadParameterItem x:Name="xe_EtaParam" Grid.Column="4" Icon="&#xE916;" Header="Estimated time remaining:" Text="7 min 24 sec" VerticalAlignment="Center" MaxWidth="150"/>
                 </Grid>
-                <ProgressBar x:Name="xe_ProgressBar" Value="50"/>
-                <TextBlock x:Name="xe_StateName" Text="Downloading..." HorizontalAlignment="Center"/>
             </StackPanel>
-            <Border x:Name="Progress_Params_Space" Height="50"/>
-            <!-- PARAMETERS / SUMMARY -->
-            <Grid x:Name="xe_ParametersTable" RowSpacing="20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*" MinWidth="10"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*" MinWidth="10"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Grid.ChildrenTransitions>
-                    <ReorderThemeTransition />
-                </Grid.ChildrenTransitions>
-                <controls:DownloadParameterItem x:Name="xe_SpeedParam" Icon="&#xEC4A;" Header="Speed:" Text="12.42 MB/s" VerticalAlignment="Center" MaxWidth="150"/>
-                <controls:DownloadParameterItem x:Name="xe_DownloadParam" Grid.Column="2" Icon="&#xE896;" Header="Downloaded:" Text="252.42 MB / 1.24 GB" VerticalAlignment="Center" MaxWidth="150"/>
-                <controls:DownloadParameterItem x:Name="xe_EtaParam" Grid.Column="4" Icon="&#xE916;" Header="Estimated time remaining:" Text="7 min 24 sec" VerticalAlignment="Center" MaxWidth="150"/>
-            </Grid>
-            <TextBlock x:Name="xe_SummaryTextBlock" Text="Summary Text" Visibility="Collapsed" FontSize="14" HorizontalAlignment="Center" />
-            <Border x:Name="Params_Abort_Space" Height="75" />
-            <!-- ABORT, FINISH, OPEN FOLDER -->
-            <StackPanel Spacing="20">
-                <Button x:Name="xe_OpenFolderButton" Content="Open folder" Visibility="Collapsed" Style="{StaticResource ButtonStyle}"/>
-                <Button x:Name="xe_FinishButton" Content="Finish" Visibility="Collapsed" Style="{StaticResource ButtonStyle}"/>
+            <!-- SUMMARY -->
+            <StackPanel x:Name="xe_FinishedBlock" Spacing="5" Visibility="Collapsed">
+                <controls:CompositeFontIcon x:Name="xe_SuccessIcon" Icon="&#xF13E;" BackgroundIcon="&#xF137;" Foreground="White" Background="ForestGreen" FontSize="72"/>
+                <controls:CompositeFontIcon x:Name="xe_ErrorIcon" Icon="&#xF13D;" BackgroundIcon="&#xF137;" Foreground="White" Background="IndianRed" FontSize="72"/>
+                <TextBlock x:Name="xe_SummaryTextBlock" Text="Finished in: 7 min 34 sec" FontSize="16" HorizontalAlignment="Center" />
+            </StackPanel>
+            
+            <Border x:Name="Params_Abort_Space" Height="55" />
+            
+            <!-- BUTTONS -->
+            <StackPanel>
                 <Button x:Name="xe_AbortButton" Content="Abort" Style="{StaticResource ButtonStyle}">
                     <Button.Flyout>
                         <Flyout>
@@ -202,6 +213,8 @@
                         </Flyout>
                     </Button.Flyout>
                 </Button>
+                <Button x:Name="xe_OpenFolderButton" Content="Open folder" Visibility="Collapsed" Style="{StaticResource ButtonStyle}"/>
+                <Button x:Name="xe_FinishButton" Content="Finish" Visibility="Collapsed" Style="{StaticResource ButtonStyle}"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>
