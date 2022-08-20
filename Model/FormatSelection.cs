@@ -21,12 +21,12 @@ namespace Model
         {
             if (VideoSelection is null)
             {
-                return AudioSelection!.Name;
+                return AudioSelection!.Id;
             }
 
             if (AudioSelection is null)
             {
-                return VideoSelection!.Name;
+                return VideoSelection!.Id;
             }
 
             return $"{VideoSelection.Id}+{AudioSelection.Id}";
