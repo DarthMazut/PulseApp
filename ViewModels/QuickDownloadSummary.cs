@@ -87,7 +87,17 @@ namespace ViewModels
         private static FormatSelection? FillDownloadSummaryForVideo(QuickDownloadSummary newSummary, QuickDownloadNavigationData navigationData)
         {
             FormatInfo? videoFormat = navigationData.SelectedVideoFormat;
-            FormatInfo? audioFormat = navigationData.Metadata.FormatTable?.ResolveBestAudioFormatForExtension(navigationData.SelectedVideoFormat.Extension);
+            FormatInfo? audioFormat;
+
+            if (videoFormat?.Type == FormatType.Merged)
+            {
+                audioFormat = videoFormat;
+            }
+            else
+            {
+                audioFormat = navigationData.Metadata.FormatTable?.ResolveBestAudioFormatForExtension(navigationData.SelectedVideoFormat.Extension);
+            }
+
             if (videoFormat is not null && audioFormat is not null)
             {
                 FormatSelection formatSelection = FormatSelection.FromAudioVideoFormat(audioFormat, videoFormat);
