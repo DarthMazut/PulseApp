@@ -90,7 +90,7 @@ namespace ViewModels
             _quickDownloadData.SelectedVideoFormat = _quickDownloadData.Metadata.FormatTable?
                 .GetOnlyExtensions(SelectedExtension!)
                 .GetOnlyResolution(SelectedResolution!)
-                .AvailableFormats.First();
+                .GetHighestVideoQuality();
 
             return Navigator.NavigateAsync(AppPages.QuickDownloadSummaryPage.Module, _quickDownloadData);
         }
