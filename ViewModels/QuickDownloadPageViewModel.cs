@@ -6,9 +6,11 @@ using Model;
 using Model.Settings;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Logging;
 
 namespace ViewModels
 {
@@ -23,6 +25,7 @@ namespace ViewModels
 
         private QuickDownloadNavigationData? _navigationData;
         private CancellationTokenSource _cts = new();
+        private bool _faulted;
 
         public QuickDownloadPageViewModel()
         {
@@ -40,8 +43,31 @@ namespace ViewModels
         [ObservableProperty]
         private byte[]? _rawImage;
 
+        [ObservableProperty]
+        private string? _partsText;
+
+        [ObservableProperty]
+        private int _percentageValue;
+
+        [ObservableProperty]
+        private string? _percentageText;
+
+        [ObservableProperty]
+        private string? _currentDownloadSpeedText;
+
+        [ObservableProperty]
+        private string? _downloadedText;
+
+        [ObservableProperty]
+        private string? _etaText;
+
+        [ObservableProperty]
+        private string? _summaryText;
+
         public async Task OnNavigatedToAsync(NavigationData navigationData)
         {
+            Logger.LogInfo($"Navigated to {GetType().Name}");
+
             if (navigationData.Data is QuickDownloadNavigationData data && data.QuickDownloadSummary is not null)
             {
                 _navigationData = data;
@@ -63,34 +89,128 @@ namespace ViewModels
                     ProgressCallback = new Progress<DownloadProgress>(DownloadProgressReceived)
                 };
 
-                if (data.MediumSelection == MediumSelection.Video)
+                Stopwatch stopwatch = new();
+                stopwatch.Start();
+
+                try
                 {
-                    //await adapter.DownloadVideoAsync(downloadJob);
+                    if (data.MediumSelection == MediumSelection.Video)
+                    {
+                        Logger.LogInfo("About to invoke DownloadVideoAsync().");
+                        await adapter.DownloadVideoAsync(downloadJob);
+                    }
+
+                    if (data.MediumSelection == MediumSelection.Music)
+                    {
+                        Logger.LogInfo("About to invoke DownloadMusicAsync().");
+                        await adapter.DownloadMusicAsync(downloadJob);
+                    }
+                }
+                catch (OperationCanceledException ex)
+                {
+                    Logger.LogInfo(ex, "Downloading operation cancelled."); 
+                }
+                finally
+                {
+                    Logger.LogInfo("Disposing _cts...");
+                    _cts.Dispose();
+                    Logger.LogInfo("_cts disposed successfully");
                 }
 
-                if (data.MediumSelection == MediumSelection.Music)
-                {
-                    //await adapter.DownloadMusicAsync(downloadJob);
-                }
+                stopwatch.Stop();
+                Logger.LogInfo($"Downloading finished; faulted={_faulted}");
+
+                SummaryText = _faulted ?
+                    "Something went wrong. Please contact app provider." :
+                    $"Downloading finished in: {stopwatch.Elapsed:hh\\:mm\\:ss}";
+
+                ChangeState(_faulted ? ERROR_STATE_NAME : FINISHED_STATE_NAME);
             }
         }
 
         private void DownloadProgressReceived(DownloadProgress progress)
         {
-            // TODO
+            Logger.LogDebug(progress.CurrentMessage);
+
+            if (progress.IsErrorMessage && !_faulted)
+            {
+                _faulted = true;
+                Logger.LogInfo($"Faulted set to TRUE");
+            }
+
+            if (progress.State == DownloadState.Downloading)
+            {
+                ChangeState(DOWNLOADING_STATE_NAME);
+
+                PartsText = $"{progress.CurrentPart}/{progress.Parts}";
+                PercentageValue = progress.CurrentPercentage is double currentValuePercentage ? (int)Math.Round(currentValuePercentage) : 0;
+                PercentageText = progress.CurrentPercentage is double currentTextPercentage ? Math.Round(currentTextPercentage).ToString() + " %" : string.Empty;
+                CurrentDownloadSpeedText = progress.CurrentSpeed?.ToString() ?? string.Empty;
+                DownloadedText = $"{progress.CurrentFileSize.ToString() ?? string.Empty} / {progress.TotalFileSize?.ToString() ?? string.Empty}";
+                EtaText = progress.CurrentEta?.ToString() ?? string.Empty;
+            }
+
+            if (progress.State == DownloadState.Merging)
+            {
+                ChangeState(MERGING_STATE_NAME);
+            }
+
+            if (progress.State == DownloadState.Cleaning)
+            {
+                ChangeState(CLEANING_STATE_NAME);
+            }
         }
 
         [RelayCommand]
         private Task Abort()
         {
+            Logger.LogInfo("Aborted button clicked.");
             _cts.Cancel();
-            return Navigator.NavigateAsync(AppPages.QuickDownloadSummaryPage.Module, _navigationData);
+            return Navigator.NavigateAsync(AppPages.HomePage.Module);
+        }
+
+        [RelayCommand]
+        private void OpenFolder()
+        {
+            Logger.LogInfo("Open folder clicked");
+            string folderToBeOpened = _navigationData.QuickDownloadSummary.OutputDirectory.FullName;
+
+            try
+            {
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = folderToBeOpened,
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.LogFatal(ex, "Exception thrown while trying to open folder after downloading finished." +
+                    $"Folder to be opened: {folderToBeOpened}");
+                throw;
+            }
+        }
+
+        [RelayCommand]
+        private Task Finish()
+        {
+            Logger.LogInfo("Finish clicked");
+            return Navigator.NavigateAsync(AppPages.HomePage.Module);
         }
 
         [RelayCommand]
         private void DebugChangeState(string parameter)
         {
             State = parameter;
+        }
+
+        private void ChangeState(string stateName)
+        {
+            if (State != stateName)
+            {
+                State = stateName;
+                Logger.LogInfo($"Downloading state changed to: {stateName}.");
+            }
         }
     }
 }

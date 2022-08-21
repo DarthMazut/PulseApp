@@ -32,7 +32,7 @@ namespace ViewModels
             {
                 Logger.Setup(new LoggerConfiguration(@"C:\Users\Ellie\Desktop\")
                 {
-                    MaximumLogFileSize = 20000 // 20 KB
+                    //MaximumLogFileSize = 20000 // 20 KB
                 });
 
                 if (Logger.IsOutputFileSizeExceeded())

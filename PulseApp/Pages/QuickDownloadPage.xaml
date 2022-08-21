@@ -23,7 +23,7 @@
             <Setter Property="TextWrapping" Value="WrapWholeWords" />
             <Setter Property="TextAlignment" Value="Justify" />
         </Style>
-        <Style x:Key="ButtonStyle" TargetType="Button">
+        <Style x:Key="ButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
             <Setter Property="Width" Value="150" />
             <Setter Property="HorizontalAlignment" Value="Center" />
             <Setter Property="Margin" Value="10" />
@@ -162,10 +162,10 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="1/2"/>
-                        <TextBlock Grid.Column="2" Text="50 %" />
+                        <TextBlock Text="{Binding PartsText}"/>
+                        <TextBlock Grid.Column="2" Text="{Binding PercentageText}" />
                     </Grid>
-                    <ProgressBar x:Name="xe_ProgressBar" Value="50"/>
+                    <ProgressBar x:Name="xe_ProgressBar" Value="{Binding PercentageValue}"/>
                     <TextBlock x:Name="xe_StateName" Text="Downloading..." HorizontalAlignment="Center"/>
                 </StackPanel>
                 
@@ -187,16 +187,16 @@
                     <Grid.ChildrenTransitions>
                         <ReorderThemeTransition />
                     </Grid.ChildrenTransitions>
-                    <controls:DownloadParameterItem x:Name="xe_SpeedParam" Icon="&#xEC4A;" Header="Speed:" Text="12.42 MB/s" VerticalAlignment="Center" MaxWidth="150"/>
-                    <controls:DownloadParameterItem x:Name="xe_DownloadParam" Grid.Column="2" Icon="&#xE896;" Header="Downloaded:" Text="252.42 MB / 1.24 GB" VerticalAlignment="Center" MaxWidth="150"/>
-                    <controls:DownloadParameterItem x:Name="xe_EtaParam" Grid.Column="4" Icon="&#xE916;" Header="Estimated time remaining:" Text="7 min 24 sec" VerticalAlignment="Center" MaxWidth="150"/>
+                    <controls:DownloadParameterItem x:Name="xe_SpeedParam" Icon="&#xEC4A;" Header="Speed:" Text="{Binding CurrentDownloadSpeedText}" VerticalAlignment="Center" MaxWidth="150"/>
+                    <controls:DownloadParameterItem x:Name="xe_DownloadParam" Grid.Column="2" Icon="&#xE896;" Header="Downloaded:" Text="{Binding DownloadedText}" VerticalAlignment="Center" MaxWidth="150"/>
+                    <controls:DownloadParameterItem x:Name="xe_EtaParam" Grid.Column="4" Icon="&#xE916;" Header="Estimated time remaining:" Text="{Binding EtaText}" VerticalAlignment="Center" MaxWidth="150"/>
                 </Grid>
             </StackPanel>
             <!-- SUMMARY -->
             <StackPanel x:Name="xe_FinishedBlock" Spacing="5" Visibility="Collapsed">
                 <controls:CompositeFontIcon x:Name="xe_SuccessIcon" Icon="&#xF13E;" BackgroundIcon="&#xF137;" Foreground="White" Background="ForestGreen" FontSize="72"/>
                 <controls:CompositeFontIcon x:Name="xe_ErrorIcon" Icon="&#xF13D;" BackgroundIcon="&#xF137;" Foreground="White" Background="IndianRed" FontSize="72"/>
-                <TextBlock x:Name="xe_SummaryTextBlock" Text="Finished in: 7 min 34 sec" FontSize="16" HorizontalAlignment="Center" />
+                <TextBlock x:Name="xe_SummaryTextBlock" Text="{Binding SummaryText}" FontSize="16" HorizontalAlignment="Center" />
             </StackPanel>
             
             <Border x:Name="Params_Abort_Space" Height="55" />
@@ -213,8 +213,8 @@
                         </Flyout>
                     </Button.Flyout>
                 </Button>
-                <Button x:Name="xe_OpenFolderButton" Content="Open folder" Visibility="Collapsed" Style="{StaticResource ButtonStyle}"/>
-                <Button x:Name="xe_FinishButton" Content="Finish" Visibility="Collapsed" Style="{StaticResource ButtonStyle}"/>
+                <Button x:Name="xe_OpenFolderButton" Content="Open folder" Command="{Binding OpenFolderCommand}" Visibility="Collapsed" Style="{StaticResource ButtonStyle}"/>
+                <Button x:Name="xe_FinishButton" Content="Finish" Command="{Binding FinishCommand}" Visibility="Collapsed" Style="{StaticResource ButtonStyle}"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

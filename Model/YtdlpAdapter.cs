@@ -129,12 +129,12 @@ namespace Model
 
         private string CreateDownloadVideoCommand(string url, string selectedFormats, string outputFolderPath, string outputFileName)
         {
-            return $"-f {selectedFormats} -o \"{Path.Combine(outputFolderPath, outputFileName)}.%(ext)s\" --newline --progress-template \"{JSON_PROGRESS_TEMPLATE}\" --ffmpeg-location {_ffmpegPath} -- {url} ";
+            return $"-f {selectedFormats} -o \"{Path.Combine(outputFolderPath, outputFileName)}.%(ext)s\" --newline --progress-template \"{JSON_PROGRESS_TEMPLATE}\" --ffmpeg-location \"{_ffmpegPath}\" -- {url} ";
         }
 
         private string CreateDownloadMusicCommand(string url, string selectedFormat, string outputFolderPath, string outputFileName)
         {
-            return $"-f {selectedFormat} -o \"{Path.Combine(outputFolderPath, outputFileName)}.%(ext)s\" --newline --progress-template \"{JSON_PROGRESS_TEMPLATE}\" --ffmpeg-location {_ffmpegPath} --audio-format mp3 -- {url} ";
+            return $"-f {selectedFormat} -o \"{Path.Combine(outputFolderPath, outputFileName)}.%(ext)s\" --newline --progress-template \"{JSON_PROGRESS_TEMPLATE}\" --ffmpeg-location \"{_ffmpegPath}\" -x --audio-format mp3 --audio-quality 4 -- {url} ";
         }
     }
 }

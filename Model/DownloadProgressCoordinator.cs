@@ -76,12 +76,7 @@ namespace Model
                 return new DownloadProgress(progressDto, _partsCount, _currentPart, rawMessage, timestamp);
             }
 
-            if (isError)
-            {
-                return new DownloadProgress(_state, rawMessage, timestamp, true);
-            }
-            
-            return new DownloadProgress(_state, rawMessage, timestamp);
+            return new DownloadProgress(_state, rawMessage, timestamp, isError);
         }
     }
 }
