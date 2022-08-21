@@ -20,7 +20,7 @@ namespace Model
         private string _protocol;
         private string _comment;
         private string _url;
-        private int? _quality;
+        private string? _quality;
         private bool? _hasDrm;
         private double? _bitrate;
         private AudioFormatDetails? _audioDetails;
@@ -76,7 +76,7 @@ namespace Model
         /// <summary>
         /// The quality of the format.
         /// </summary>
-        public int? Quality => _quality;
+        public string? Quality => _quality;
 
         /// <summary>
         /// Determines whether material is protected by Digital Rights Managment system.

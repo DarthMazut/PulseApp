@@ -20,7 +20,7 @@ namespace Model.Dto
         long? filesize,
         int? source_preference,
         double? fps,
-        int? quality,
+        string? quality,
         bool? has_drm,
         double? tbr,
         string language,

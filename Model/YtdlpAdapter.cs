@@ -69,11 +69,11 @@ namespace Model
                     MetadataDto? metadataDto = await Task.Run(() => JsonConvert.DeserializeObject<MetadataDto>(lastResponse));
                     if (metadataDto is not null)
                     {
-                        return VideoMetadata.FromRecord(metadataDto); 
+                        return VideoMetadata.FromRecord(metadataDto);
                     }
                     
                 }
-                catch (JsonSerializationException ex)
+                catch (JsonException ex)
                 {
                     throw new YtdlpException(
                         "Cannot deserialize output from Yt-dlp.",
