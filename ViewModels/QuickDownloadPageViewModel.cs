@@ -115,9 +115,9 @@ namespace ViewModels
                     Logger.LogInfo("Disposing _cts...");
                     _cts.Dispose();
                     Logger.LogInfo("_cts disposed successfully");
+                    stopwatch.Stop();
                 }
 
-                stopwatch.Stop();
                 Logger.LogInfo($"Downloading finished; faulted={_faulted}");
 
                 SummaryText = _faulted ?
