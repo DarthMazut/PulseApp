@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Logging;
 
 namespace ViewModels
 {
@@ -26,6 +27,7 @@ namespace ViewModels
         [RelayCommand]
         private Task VideoSelected()
         {
+            Logger.LogInfo("Video selected");
             _navigationData.MediumSelection = MediumSelection.Video;
             return Navigator.NavigateAsync(AppPages.VideoFormatSelectionPage.Module, _navigationData);
         }
@@ -33,6 +35,7 @@ namespace ViewModels
         [RelayCommand]
         private Task AudioSelected()
         {
+            Logger.LogInfo("Music selected");
             _navigationData.MediumSelection = MediumSelection.Music;
             return Navigator.NavigateAsync(AppPages.QuickDownloadSummaryPage.Module, _navigationData);
         }
@@ -47,11 +50,6 @@ namespace ViewModels
             if (navigationData.Data is QuickDownloadNavigationData data)
             {
                 _navigationData = data;
-            }
-            else
-            {
-                throw new ArgumentException($"Attempt was made to navigate to {GetType().Name}, " +
-                    $"but no {typeof(QuickDownloadNavigationData)} navigation data was provided.");
             }
         }
     }

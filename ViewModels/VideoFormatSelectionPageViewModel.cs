@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Logging;
 
 namespace ViewModels
 {
@@ -92,11 +93,13 @@ namespace ViewModels
                 .GetOnlyResolution(SelectedResolution!)
                 .GetHighestVideoQuality();
 
+            Logger.LogInfo($"Done clicked; selected format: {_quickDownloadData.SelectedVideoFormat.Id}");
             return Navigator.NavigateAsync(AppPages.QuickDownloadSummaryPage.Module, _quickDownloadData);
         }
 
         private void OnSelectedExtensionChanged()
         {
+            Logger.LogInfo($"Extension selected: {SelectedExtension}");
             if (SelectedExtension is not null)
             {
                 IsAvailableResolutionsComboBoxEnabled = true;
@@ -106,6 +109,7 @@ namespace ViewModels
 
         private void OnSelectedResolutionChanged()
         {
+            Logger.LogInfo($"Resolution selected: {SelectedResolution}");
             if (SelectedResolution is not null)
             {
                 IsDoneButtonEnabled = true;

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Logging;
 
 namespace ViewModels
 {
@@ -20,6 +21,7 @@ namespace ViewModels
 
         public GeneralSettingsTabViewModel()
         {
+            Logger.LogInfo($"{GetType().Name}..ctor");
             _settingsProvider = SettingsManager.Retrieve<ApplicationSettings>(ApplicationSettings.ID);
         }
 
@@ -41,6 +43,7 @@ namespace ViewModels
         [RelayCommand]
         private async Task BrowseFolder()
         {
+            Logger.LogInfo("Browse folder clicked");
             IDialogModule<BrowseFolderDialogProperties> browseFolderDialogModule = DialogManager.GetDialog<BrowseFolderDialogProperties>("OpenFolderDialog");
             if (await browseFolderDialogModule.ShowModalAsync(this) == true)
             {
@@ -52,13 +55,16 @@ namespace ViewModels
         private async Task Loaded()
         {
             DefaultOutputPath = (await _settingsProvider.LoadAsync()).DefaultOutputFolder;
+            Logger.LogInfo($"DefaultOutputPath loaded ({DefaultOutputPath}).");
         }
 
         private async void OnDefaultOutputPathChangedCallback()
         {
+            Logger.LogInfo($"Changing DefaultOutputPath to {DefaultOutputPath}");
             if (Directory.Exists(DefaultOutputPath))
             {
                 IsErrorVisible = false;
+                Logger.LogInfo("Trying to update settings with new DefaultOutputPath...");
                 await _settingsProvider.UpdateAsync((settings) =>
                 {
                     settings.DefaultOutputFolder = DefaultOutputPath;
@@ -66,6 +72,7 @@ namespace ViewModels
             }
             else
             {
+                Logger.LogWarning($"Directory {DefaultOutputPath} does not exist.");
                 IsErrorVisible = true;
             }
         }

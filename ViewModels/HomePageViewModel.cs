@@ -92,17 +92,20 @@ namespace ViewModels
             VideoMetadata metadata;
             try
             {
+                Logger.LogInfo($"Trying to download metadata for: {e.NewValue}");
                 metadata = await _ytdlpAdapter.DownloadVideoMetadataAsync(e.NewValue, token);
                 await Navigator.NavigateAsync(AppPages.SelectMediumPage.Module, new QuickDownloadNavigationData(metadata));
             }
             catch (YtdlpException ex)
             {
+                Logger.LogWarning(ex, "An exception occured while trying to download metadata.");
                 ErrorHintMessage = ex.Message;
                 SearchState = ValidationTextBoxState.Error;
                 return;
             }
             catch (OperationCanceledException)
             {
+                Logger.LogInfo("Downloading metadata cancelled.");
                 SearchState = ValidationTextBoxState.Error;
 
                 if (e.IsTimedOut)
@@ -121,7 +124,7 @@ namespace ViewModels
             }
             catch(Exception ex)
             {
-                Logger.LogFatal(ex);
+                Logger.LogFatal(ex, "App crash while downloading metadata!");
                 throw;
             }
             finally
@@ -141,6 +144,7 @@ namespace ViewModels
             {
                 DispatcherManager.GetMainThreadDispatcher().EnqueueOnMainThread(() =>
                 {
+                    Logger.LogWarning("Operation is taking longer than expected, showing abort button...");
                     IsAbortButtonEnabled = true;
                     IsAbortButtonVisible = true;
                 });
@@ -152,6 +156,7 @@ namespace ViewModels
         [RelayCommand]
         private void Abort()
         {
+            Logger.LogInfo("Abort clicked while downloading metadata");
             IsAbortButtonEnabled = false;
             _searchText.CancelAsyncOperation();
         }
@@ -159,6 +164,7 @@ namespace ViewModels
         [RelayCommand]
         private Task ConfigureDependencies()
         {
+            Logger.LogInfo("Configure Dependencies clicked.");
             return Navigator.NavigateAsync(AppPages.SettingsPage.Module, new AppNavigationData()
             {
                 RedirectToDependenciesSettingsTab = true
@@ -205,9 +211,11 @@ namespace ViewModels
             }
 
             ISettingsSectionProvider<ApplicationSettings> settingsProvider = SettingsManager.Retrieve<ApplicationSettings>(ApplicationSettings.ID);
+            Logger.LogInfo("About to load settings...");
             ApplicationSettings settings = await settingsProvider.LoadAsync();
 
             AreDependenciesAvailable = settings.YtdlpPath != null && settings.FfmpegPath != null;
+            Logger.LogInfo($"Dependencies available: {AreDependenciesAvailable}");
             if (AreDependenciesAvailable)
             {
                 _ytdlpAdapter = new YtdlpAdapter(settings.YtdlpPath!, settings.FfmpegPath!);

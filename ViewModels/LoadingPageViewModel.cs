@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MochaCore.Behaviours;
 using MochaCore.Navigation;
 using MochaCore.Settings;
 using Model.Settings;
@@ -30,9 +31,9 @@ namespace ViewModels
         {
             if (!Logger.IsInitialized)
             {
-                Logger.Setup(new LoggerConfiguration(@"C:\Users\Ellie\Desktop\")
+                Logger.Setup(new LoggerConfiguration(BehaviourManager.Recall<object, string>("GetAppLocalFolder").Execute(new object()))
                 {
-                    //MaximumLogFileSize = 20000 // 20 KB
+                    MaximumLogFileSize = 50 * 1024 * 1024 // 50 MB
                 });
 
                 if (Logger.IsOutputFileSizeExceeded())
@@ -44,6 +45,7 @@ namespace ViewModels
             }
 
             ISettingsSectionProvider<ApplicationSettings> settingsProvider = SettingsManager.Retrieve<ApplicationSettings>(ApplicationSettings.ID);
+            Logger.LogInfo("About to load settings...");
             _ = await settingsProvider.LoadAsync(); // Load to cache
 
             await Task.Delay(2000);

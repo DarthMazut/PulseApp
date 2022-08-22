@@ -22,8 +22,10 @@ namespace ViewModels
         [RelayCommand]
         private async Task Loaded()
         {
+            Logger.LogInfo($"{GetType().Name} loaded");
             if (_exportingTask != null)
             {
+                Logger.LogInfo("Exporting logs in progress...");
                 IsExportingLogs = true;
                 await _exportingTask;
                 IsExportingLogs = false;
@@ -35,6 +37,7 @@ namespace ViewModels
         [RelayCommand]
         private async Task ExportLogs()
         {
+            Logger.LogInfo("ExportLogs clicked,");
             IDialogModule<SaveFileDialogProperties> saveFileDialog = DialogManager.GetDialog<SaveFileDialogProperties>("SaveFileDialog");
             saveFileDialog.Properties.Filters = new List<ExtensionFilter>()
             {
@@ -45,6 +48,7 @@ namespace ViewModels
             if (await saveFileDialog.ShowModalAsync(this) == true)
             {
                 IsExportingLogs = true;
+                Logger.LogInfo($"About to export logs to {saveFileDialog.Properties.SelectedPath!}");
                 _exportingTask = Logger.ExportAll(saveFileDialog.Properties.SelectedPath!);
                 await _exportingTask;
                 IsExportingLogs = false;

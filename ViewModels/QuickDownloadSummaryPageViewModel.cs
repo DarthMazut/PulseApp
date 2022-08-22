@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ViewModels.Dialogs;
+using ViewModels.Logging;
 
 namespace ViewModels
 {
@@ -61,19 +62,23 @@ namespace ViewModels
                 RawImage = await data.DownloadRawImageAsJpeg();
 
                 ISettingsSectionProvider<ApplicationSettings> settingsProvider = SettingsManager.Retrieve<ApplicationSettings>(ApplicationSettings.ID);
+                Logger.LogInfo("Trying to load settings...");
                 ApplicationSettings settings = await settingsProvider.LoadAsync();
 
                 (DownloadSummary, data.FormatSelection) = await QuickDownloadSummary.FromNavigationData(data, settings);
+                Logger.LogInfo($"Selected format is: {data.FormatSelection}");
             }
         }
 
         [RelayCommand]
         private async Task EditOutputFolder()
         {
+            Logger.LogInfo("EditOutputFolder clicked.");
             IDialogModule<BrowseFolderDialogProperties> browseFolderDialogModule = DialogManager.GetDialog<BrowseFolderDialogProperties>("OpenFolderDialog");
             browseFolderDialogModule.Properties.InitialDirectory = DownloadSummary.OutputDirectory?.FullName;
             if (await browseFolderDialogModule.ShowModalAsync(this) == true)
             {
+                Logger.LogInfo($"Trying to change output folder to: {browseFolderDialogModule.Properties.SelectedPath}");
                 if(browseFolderDialogModule.Properties.SelectedPath is string selectedFolder)
                 {
                     DownloadSummary.OutputDirectory = new DirectoryInfo(selectedFolder);
@@ -84,10 +89,12 @@ namespace ViewModels
         [RelayCommand]
         private async Task EditTargetFileName()
         {
+            Logger.LogInfo("EditTargetFileName clicked.");
             ICustomDialogModule<EnterNameDialogProperties> enterNameDialogModule = DialogManager.GetCustomDialog<EnterNameDialogProperties>("EnterNameDialog");
             enterNameDialogModule.Properties.ProvidedName = DownloadSummary.TargetFileName;
             enterNameDialogModule.Properties.Extension = DownloadSummary.TargetFormat ?? "xyz";
             await enterNameDialogModule.ShowModalAsync(this);
+            Logger.LogInfo($"Trying to change target file name to: {enterNameDialogModule.Properties.ProvidedName}");
             if (!string.IsNullOrWhiteSpace(enterNameDialogModule.Properties.ProvidedName))
             {
                 DownloadSummary.TargetFileName = enterNameDialogModule.Properties.ProvidedName;
@@ -97,6 +104,7 @@ namespace ViewModels
         [RelayCommand]
         private async Task Download()
         {
+            Logger.LogInfo("Download clicked.");
             _summaryData!.QuickDownloadSummary = DownloadSummary;
             await Navigator.NavigateAsync(AppPages.QuickDownloadPage.Module, _summaryData!);
         }

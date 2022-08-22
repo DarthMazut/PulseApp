@@ -172,8 +172,8 @@ namespace ViewModels
         [RelayCommand]
         private void OpenFolder()
         {
-            Logger.LogInfo("Open folder clicked");
             string folderToBeOpened = _navigationData.QuickDownloadSummary.OutputDirectory.FullName;
+            Logger.LogInfo($"Open folder clicked: {folderToBeOpened}");
 
             try
             {
