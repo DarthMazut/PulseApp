@@ -15,6 +15,7 @@ namespace PulseApp
             InitializeComponent();
             ExtendsContentIntoTitleBar = true;
             SetTitleBar(AppTitleBar);
+            Title = "Pulse App";
         }
     }
 }

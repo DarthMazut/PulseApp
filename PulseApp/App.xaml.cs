@@ -33,6 +33,8 @@ using Windows.Foundation.Collections;
 using Windows.Storage;
 using PulseApp.Dialogs;
 using PulseApp.Pages;
+using Microsoft.UI;
+using Microsoft.UI.Windowing;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -76,6 +78,8 @@ namespace PulseApp
             _mainWindow = new MainWindow();
             _mainWindow.Activate();
 
+            SetupTaskbarIcon();
+
             NavigationManager.AddModule(AppPages.LoadingPage.Id, () => new NavigationModule(new LoadingPage()));
             NavigationManager.AddModule(AppPages.HomePage.Id, () => new NavigationModule(new HomePage()));
             NavigationManager.AddModule(AppPages.SelectMediumPage.Id, () => new NavigationModule(new SelectMediumPage()));
@@ -97,6 +101,14 @@ namespace PulseApp
             DispatcherManager.SetMainThreadDispatcher(new WinUIDispatcher(_mainWindow));
 
             BehaviourManager.Record("GetAppLocalFolder", (object o) => ApplicationData.Current.LocalFolder.Path);
+        }
+
+        private static void SetupTaskbarIcon()
+        {
+            var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow);
+            WindowId windowId = Win32Interop.GetWindowIdFromWindow(hWnd);
+            AppWindow appWindow = AppWindow.GetFromWindowId(windowId);
+            appWindow.SetIcon("Assets/icon.ico");
         }
     }
 }
