@@ -5,19 +5,11 @@ Download your favourite video and music for free, with intuitive UI experience.
 ![Application home page screenshot](./Screenshots/HomePage.JPG)
 
 ## Current development status
-The following items are planned to be included in the next release:
-
- - [x] Download Page (2 MD)
- - [x] Path for ffmpeg (1 MD)
- - [x] WIP for Archive and Advanced download  (0.5 MD)
- - [x] Report bug link (1 MD)
- - [ ] Logging (1 MD)
- - [ ] App Icons (0.5 MD)
- - [ ] Distribution (1 MD)
+Awaiting for users feedback 😎.
 
 
 **Completion percentage:**  
-![64%](https://progress-bar.dev/64/)
+![100%](https://progress-bar.dev/100/)
 
 ## How to contribute?
 At the moment you cannot build _Pulse App_ localy, because it uses local dependencies, but it will change in the future. If you'd like to help to improve _Pulse App_ please report any bugs or improvements ideas by creating issues.
@@ -25,7 +17,7 @@ At the moment you cannot build _Pulse App_ localy, because it uses local depende
 ## System requirements:
  * Windows 10 1809 or higher (Yes, it's Windows only, no cross-platform this time 😢)
  * Internet connection (duh!)
- * At least 1 GB of free space for logs collecting purpose
+ * At least 200 MB of additional free space for logs collecting purpose
 
 ## Credits & Attributions
 _Pulse App_ uses two external dependencies:
