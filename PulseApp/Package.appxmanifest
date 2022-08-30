@@ -9,7 +9,7 @@
   <Identity
     Name="6bc23e63-221c-40bc-985f-d248c67c0ba5"
     Publisher="CN=Ellie"
-    Version="0.1.0.0" />
+    Version="0.2.0.0" />
 
   <Properties>
     <DisplayName>Pulse App</DisplayName>
