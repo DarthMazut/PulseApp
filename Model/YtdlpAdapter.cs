@@ -15,8 +15,6 @@ namespace Model
     /// </summary>
     public class YtdlpAdapter
     {
-        private const string JSON_PROGRESS_TEMPLATE = @"[JSONDownload]{\""downloaded\"": %(progress.downloaded_bytes)s,\""total\"": %(progress.total_bytes)s,\""elapsed\"": %(progress.elapsed)s,\""speed\"": %(progress.speed)s,\""eta\"": %(progress.eta)s}";
-
         private readonly ProcessMessenger _messenger;
         private readonly string _ffmpegPath;
 
@@ -37,10 +35,7 @@ namespace Model
         /// </summary>
         /// <param name="url">Target video URL.</param>
         /// <exception cref="YtdlpException"/>
-        public Task<VideoMetadata> DownloadVideoMetadataAsync(string url)
-        {
-            return DownloadVideoMetadataAsync(url, default);
-        }
+        public Task<VideoMetadata> DownloadVideoMetadataAsync(string url) => DownloadVideoMetadataAsync(url, default);
 
         /// <summary>
         /// Asynchronously downloads metadata for specific video.
@@ -51,7 +46,9 @@ namespace Model
         /// <exception cref="YtdlpException"/>
         public async Task<VideoMetadata> DownloadVideoMetadataAsync(string url, CancellationToken token)
         {
-            ProcessCommandOutput output = await _messenger.SendCommandAndWaitForResponseAsync(CreateGetMetadataCommand(url), null, token);
+            string getMetadataCommand = new YtdlpCommandBuilder(url).GetMetadata().AsCommand();
+
+            ProcessCommandOutput output = await _messenger.SendCommandAndWaitForResponseAsync(getMetadataCommand, null, token);
             
             if (output.ErrorPartialResults.Any() && !output.PartialResults.Any())
             {
@@ -91,11 +88,14 @@ namespace Model
         /// <param name="downloadJob">Contains details of video to be downloaded.</param>
         public Task DownloadVideoAsync(DownloadJob downloadJob)
         {
-            return DownloadVideoBase(downloadJob, CreateDownloadVideoCommand(
-                    downloadJob.Url,
-                    downloadJob.Selection.ToString(),
-                    downloadJob.OutputDirectory.FullName,
-                    downloadJob.DownloadedFileName));
+            return DownloadVideoBase(downloadJob,
+                YtdlpCommandBuilder
+                    .Download(downloadJob.Url)
+                    .SetTargetFormats(downloadJob.Selection)
+                    .SetOutputFolder(provider => downloadJob.OutputDirectory.FullName)
+                    .SetOutputName(provider => $"{downloadJob.DownloadedFileName}.{provider.Extension}")
+                    .SetFfmpegPath(_ffmpegPath)
+                    .AsCommand());
         }
 
         /// <summary>
@@ -104,11 +104,15 @@ namespace Model
         /// <param name="downloadJob">Contains details of audio to be downloaded.</param>
         public Task DownloadMusicAsync(DownloadJob downloadJob)
         {
-            return DownloadVideoBase(downloadJob, CreateDownloadMusicCommand(
-                    downloadJob.Url,
-                    downloadJob.Selection.ToString(),
-                    downloadJob.OutputDirectory.FullName,
-                    downloadJob.DownloadedFileName));
+            return DownloadVideoBase(downloadJob,
+                YtdlpCommandBuilder
+                .Download(downloadJob.Url)
+                .SetTargetFormats(downloadJob.Selection)
+                .SetOutputFolder(provider => downloadJob.OutputDirectory.FullName)
+                .SetOutputName(provider => $"{downloadJob.DownloadedFileName}.{provider.Extension}")
+                .SetFfmpegPath(_ffmpegPath)
+                .ExtractAudio(AudioFormat.MP3, 4)
+                .AsCommand());
         }
 
         private Task DownloadVideoBase(DownloadJob downloadJob, string command)
@@ -120,21 +124,6 @@ namespace Model
                 {
                     downloadJob.ProgressCallback?.Report(progressCoordinator.ParseOutput(o));
                 }), downloadJob.CancellationToken ?? default);
-        }
-
-        private string CreateGetMetadataCommand(string url)
-        {
-            return $@"--print ""%()j"" -- {url}";
-        }
-
-        private string CreateDownloadVideoCommand(string url, string selectedFormats, string outputFolderPath, string outputFileName)
-        {
-            return $"-f {selectedFormats} -o \"{Path.Combine(outputFolderPath, outputFileName)}.%(ext)s\" --newline --progress-template \"{JSON_PROGRESS_TEMPLATE}\" --ffmpeg-location \"{_ffmpegPath}\" -- {url} ";
-        }
-
-        private string CreateDownloadMusicCommand(string url, string selectedFormat, string outputFolderPath, string outputFileName)
-        {
-            return $"-f {selectedFormat} -o \"{Path.Combine(outputFolderPath, outputFileName)}.%(ext)s\" --newline --progress-template \"{JSON_PROGRESS_TEMPLATE}\" --ffmpeg-location \"{_ffmpegPath}\" -x --audio-format mp3 --audio-quality 4 -- {url} ";
         }
     }
 }
