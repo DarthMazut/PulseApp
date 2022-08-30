@@ -1,6 +1,7 @@
 ﻿using Model.Dto;
 using Model.Exceptions;
 using Model.ProcessCommunication;
+using Model.Progress;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace Model.Adapter
 {
     /// <summary>
     /// Provides a way to communicate with external yt-dlp process.
@@ -49,7 +50,7 @@ namespace Model
             string getMetadataCommand = new YtdlpCommandBuilder(url).GetMetadata().AsCommand();
 
             ProcessCommandOutput output = await _messenger.SendCommandAndWaitForResponseAsync(getMetadataCommand, null, token);
-            
+
             if (output.ErrorPartialResults.Any() && !output.PartialResults.Any())
             {
                 throw new YtdlpException(
@@ -68,7 +69,7 @@ namespace Model
                     {
                         return VideoMetadata.FromRecord(metadataDto);
                     }
-                    
+
                 }
                 catch (JsonException ex)
                 {
@@ -76,7 +77,7 @@ namespace Model
                         "Cannot deserialize output from Yt-dlp.",
                         ex,
                         output.ErrorPartialResults.Select(o => o.Message).ToList());
-                } 
+                }
             }
 
             throw new YtdlpException("No response received from Yt-dlp.");
@@ -111,7 +112,7 @@ namespace Model
                 .SetOutputFolder(provider => downloadJob.OutputDirectory.FullName)
                 .SetOutputName(provider => $"{downloadJob.DownloadedFileName}.{provider.Extension}")
                 .SetFfmpegPath(_ffmpegPath)
-                .ExtractAudio(AudioFormat.MP3, 4)
+                .ExtractAudio(TargetAudioFormat.MP3, 4)
                 .AsCommand());
         }
 

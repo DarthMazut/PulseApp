@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Model.Progress;
 
 namespace Model
 {
@@ -11,7 +12,6 @@ namespace Model
     /// </summary>
     public class DownloadJob
     {
-
         public string Url { get; set; }
 
         public FormatSelection Selection { get; set; }

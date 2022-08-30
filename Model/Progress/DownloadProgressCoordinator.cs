@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace Model.Progress
 {
     /// <summary>
     /// Handles output from <i>yt-dlp</i> download process and
@@ -36,7 +36,7 @@ namespace Model
                 string formatString = rawMessage.Split(':', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Last();
                 _partsCount = formatString.Contains('+') ? 2 : 1;
             }
-            
+
             if (rawMessage.StartsWith("[download] Destination:"))
             {
                 _state = DownloadState.Downloading;
@@ -59,7 +59,7 @@ namespace Model
                 string rawJson = rawMessage.Substring("[JSONDownload]".Length);
                 rawJson = rawJson.Replace(": NA", ": null");
                 DownloadProgressDto? progressDto;
-                
+
                 try
                 {
                     progressDto = JsonConvert.DeserializeObject<DownloadProgressDto>(rawJson);

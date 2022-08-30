@@ -5,6 +5,7 @@ using MochaCore.Navigation;
 using MochaCore.Settings;
 using MochaCore.Utils;
 using Model;
+using Model.Adapter;
 using Model.Exceptions;
 using Model.Settings;
 using System;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace Model.Adapter
 {
     /// <summary>
     /// Exposes fluent API for easy yt-dlp command creation.
@@ -161,7 +161,7 @@ namespace Model
         /// Extracts audio from downloaded file and converts it to specified format.
         /// </summary>
         /// <param name="targetFormat">Target format of audio convertion.</param>
-        public YtdlpCommandBuilder ExtractAudio(AudioFormat targetFormat)
+        public YtdlpCommandBuilder ExtractAudio(TargetAudioFormat targetFormat)
         {
             return ExtractAudio(targetFormat.ToString().ToLower(), null);
         }
@@ -171,7 +171,7 @@ namespace Model
         /// </summary>
         /// <param name="targetFormat">Target format of audio convertion.</param>
         /// <param name="quality">Quality of convertion where 0 is best and 10 worst quality.</param>
-        public YtdlpCommandBuilder ExtractAudio(AudioFormat targetFormat, int quality)
+        public YtdlpCommandBuilder ExtractAudio(TargetAudioFormat targetFormat, int quality)
         {
             return ExtractAudio(targetFormat.ToString().ToLower(), quality);
         }
@@ -273,56 +273,5 @@ namespace Model
 
             return requestedQuality;
         }
-    }
-
-    /// <summary>
-    /// Provides a list of the audio formats supported by ffmpeg.
-    /// </summary>
-    public enum AudioFormat
-    {
-        AAC,
-        ALAC,
-        FLAC,
-        M4A,
-        MP3,
-        OPUS,
-        VORBIS,
-        WAV
-    }
-
-    /// <summary>
-    /// Provides a *yt-dlp* format expressions.
-    /// </summary>
-    public class YtdlpCommandBuilderFormatProvider
-    {
-        /// <summary>
-        /// Video ID.
-        /// </summary>
-        public string Id => "%(id)s";
-
-        /// <summary>
-        /// Video title.
-        /// </summary>
-        public string Title => "%(title)s";
-
-        /// <summary>
-        /// Target file extension without leading dot.
-        /// </summary>
-        public string Extension => "%(ext)s";
-
-        /// <summary>
-        /// Upload date in YYYYMMDD format.
-        /// </summary>
-        public string UploadDateUtc => "%(upload_date)s";
-
-        /// <summary>
-        /// Video duration in HH:mm:ss format.
-        /// </summary>
-        public string Duration => "%(duration_string)s";
-
-        /// <summary>
-        /// Video uploader name.
-        /// </summary>
-        public string Uploader => "%(uploader)s";
     }
 }

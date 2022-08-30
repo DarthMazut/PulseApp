@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace Model.Progress
 {
     /// <summary>
     /// Represents progress of download process.
@@ -70,7 +70,7 @@ namespace Model
         /// <summary>
         /// Current speed of downloading process.
         /// </summary>
-        public MemorySpace? CurrentSpeed { get;  }
+        public MemorySpace? CurrentSpeed { get; }
 
         /// <summary>
         /// Estimated time to complete the download.
@@ -101,7 +101,7 @@ namespace Model
         {
             if (TotalFileSize is not null && CurrentFileSize is not null)
             {
-                return (CurrentFileSize.Value.Bytes * 100) / TotalFileSize.Value.Bytes;
+                return CurrentFileSize.Value.Bytes * 100 / TotalFileSize.Value.Bytes;
             }
 
             return null;

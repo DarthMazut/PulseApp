@@ -3,6 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using MochaCore.Navigation;
 using MochaCore.Settings;
 using Model;
+using Model.Adapter;
+using Model.Progress;
 using Model.Settings;
 using System;
 using System.Collections.Generic;
