@@ -18,7 +18,7 @@
             <Setter Property="TextWrapping" Value="WrapWholeWords" />
             <Setter Property="TextAlignment" Value="Justify" />
         </Style>
-        <Style x:Key="HyperlinkStyle" TargetType="HyperlinkButton" BasedOn="{StaticResource DateTimePickerFlyoutLoopingSelectorNavigationButtonStyle}">
+        <Style x:Key="HyperlinkStyle" TargetType="HyperlinkButton" BasedOn="{StaticResource PulseHyperlinkStyle}">
             <Setter Property="Padding" Value="0" />
         </Style>
         

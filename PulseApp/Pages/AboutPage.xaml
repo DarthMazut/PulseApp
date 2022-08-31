@@ -39,7 +39,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="FontSize" Value="16" />
         </Style>
-        <Style x:Key="DetailItemHyperlinkStyle" TargetType="HyperlinkButton" BasedOn="{StaticResource DateTimePickerFlyoutLoopingSelectorNavigationButtonStyle}">
+        <Style x:Key="DetailItemHyperlinkStyle" TargetType="HyperlinkButton" BasedOn="{StaticResource PulseHyperlinkStyle}">
             <Setter Property="Padding" Value="0" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>

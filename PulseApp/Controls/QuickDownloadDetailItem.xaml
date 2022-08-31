@@ -28,7 +28,7 @@
             <Setter Property="TextTrimming" Value="CharacterEllipsis" />
             <Setter Property="Margin" Value="0,0,30,0" />
         </Style>
-        <Style x:Key="HyperlinkStyle" TargetType="HyperlinkButton" BasedOn="{StaticResource DateTimePickerFlyoutLoopingSelectorNavigationButtonStyle}">
+        <Style x:Key="HyperlinkStyle" TargetType="HyperlinkButton" BasedOn="{StaticResource PulseHyperlinkStyle}">
             <Setter Property="Padding" Value="0" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />

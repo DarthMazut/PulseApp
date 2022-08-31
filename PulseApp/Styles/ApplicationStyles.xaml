@@ -9,6 +9,7 @@
             <Color x:Key="PulseDefaultForegroundColor">White</Color>
             <Color x:Key="PulseTitleBarBackground">#4d4d4d</Color>
             <Color x:Key="PulseAppBackgroundColor">#202020</Color>
+            <Color x:Key="PulseHyperlinkForeground">#C5FFFFFF</Color>
         </ResourceDictionary>
 
         <!-- LIGHT -->
@@ -16,7 +17,61 @@
             <Color x:Key="PulseDefaultForegroundColor">Black</Color>
             <Color x:Key="PulseTitleBarBackground">#c2c2c2</Color>
             <Color x:Key="PulseAppBackgroundColor">#F3F3F3</Color>
+            <Color x:Key="PulseHyperlinkForeground">#9E000000</Color>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
+    <Style x:Key="PulseHyperlinkStyle" TargetType="HyperlinkButton">
+        <Setter Property="Foreground" Value="{ThemeResource PulseHyperlinkForeground}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="HyperlinkButton">
+                    <Grid Background="{TemplateBinding Background}">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource LoopingSelectorUpDownButtonBackgroundPointerOver}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource LoopingSelectorUpDownButtonForegroundPointerOver}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootBorder" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource LoopingSelectorUpDownButtonBackgroundPressed}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource LoopingSelectorUpDownButtonForegroundPressed}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleX" RepeatBehavior="Forever">
+                                            <DiscreteDoubleKeyFrame KeyTime="0:0:0.016" Value="{ThemeResource LoopingSelectorUpDownButtonScalePressed}" />
+                                            <DiscreteDoubleKeyFrame KeyTime="0:0:30" Value="{ThemeResource LoopingSelectorUpDownButtonScalePressed}" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleY" RepeatBehavior="Forever">
+                                            <DiscreteDoubleKeyFrame KeyTime="0:0:0.016" Value="{ThemeResource LoopingSelectorUpDownButtonScalePressed}" />
+                                            <DiscreteDoubleKeyFrame KeyTime="0:0:30" Value="{ThemeResource LoopingSelectorUpDownButtonScalePressed}" />
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Border x:Name="RootBorder" BackgroundSizing="{TemplateBinding BackgroundSizing}" Padding="{TemplateBinding Padding}" AutomationProperties.AccessibilityView="Raw">
+                            <TextBlock x:Name="Content" Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" Text="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RenderTransformOrigin="0.5, 0.5" TextTrimming="CharacterEllipsis" ToolTipService.ToolTip="{TemplateBinding NavigateUri}">
+                                <TextBlock.RenderTransform>
+                                    <ScaleTransform x:Name="ScaleTransform" ScaleY="1" ScaleX="1" />
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary>
