@@ -167,10 +167,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MochaCore">
-      <HintPath>..\..\..\Testowe\MochaLibrary\MochaCore\bin\Debug\net5.0\MochaCore.dll</HintPath>
+      <HintPath>..\..\..\MochaLibrary\MochaLibrary\MochaCore\bin\Debug\net5.0\MochaCore.dll</HintPath>
     </Reference>
     <Reference Include="MochaCoreWinUI">
-      <HintPath>..\..\..\Testowe\MochaLibrary\MochaCoreWinUI\bin\Debug\net6.0-windows10.0.19041.0\MochaCoreWinUI.dll</HintPath>
+      <HintPath>..\..\..\MochaLibrary\MochaLibrary\MochaCoreWinUI\bin\Debug\net6.0-windows10.0.19041.0\MochaCoreWinUI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -17,7 +17,7 @@
 
   <ItemGroup>
     <Reference Include="MochaCore">
-      <HintPath>..\..\..\Testowe\MochaLibrary\MochaCore\bin\Debug\net5.0\MochaCore.dll</HintPath>
+      <HintPath>..\..\..\MochaLibrary\MochaLibrary\MochaCore\bin\Debug\net5.0\MochaCore.dll</HintPath>
     </Reference>
   </ItemGroup>
 
