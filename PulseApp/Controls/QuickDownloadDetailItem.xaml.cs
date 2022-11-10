@@ -31,6 +31,9 @@ namespace PulseApp.Controls
 
         public static readonly DependencyProperty ValueHintTextProperty =
             DependencyProperty.Register(nameof(ValueHintText), typeof(string), typeof(QuickDownloadDetailItem), new PropertyMetadata(null));
+        
+        public static readonly DependencyProperty IsValueHintVisibleProperty =
+            DependencyProperty.Register(nameof(IsValueHintVisible), typeof(bool), typeof(QuickDownloadDetailItem), new PropertyMetadata(false));
 
         public static readonly DependencyProperty ActionButtonCommandProperty =
             DependencyProperty.Register(nameof(ActionButtonCommand), typeof(ICommand), typeof(QuickDownloadDetailItem), new PropertyMetadata(null));
@@ -40,6 +43,12 @@ namespace PulseApp.Controls
 
         public static readonly DependencyProperty HyperlinkUriProperty =
             DependencyProperty.Register(nameof(HyperlinkUri), typeof(Uri), typeof(QuickDownloadDetailItem), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty ErrorHintTextProperty =
+            DependencyProperty.Register(nameof(ErrorHintText), typeof(string), typeof(QuickDownloadDetailItem), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty IsErrorHintVisibleProperty =
+            DependencyProperty.Register(nameof(IsErrorHintVisible), typeof(bool), typeof(QuickDownloadDetailItem), new PropertyMetadata(false));
 
         public string HeaderText
         {
@@ -59,6 +68,12 @@ namespace PulseApp.Controls
             set { SetValue(ValueHintTextProperty, value); }
         }
 
+        public bool IsValueHintVisible
+        {
+            get { return (bool)GetValue(IsValueHintVisibleProperty); }
+            set { SetValue(IsValueHintVisibleProperty, value); }
+        }
+
         public ICommand ActionButtonCommand
         {
             get { return (ICommand)GetValue(ActionButtonCommandProperty); }
@@ -75,6 +90,18 @@ namespace PulseApp.Controls
         {
             get { return (Uri)GetValue(HyperlinkUriProperty); }
             set { SetValue(HyperlinkUriProperty, value); }
+        }
+
+        public string ErrorHintText
+        {
+            get { return (string)GetValue(ErrorHintTextProperty); }
+            set { SetValue(ErrorHintTextProperty, value); }
+        }
+
+        public bool IsErrorHintVisible
+        {
+            get { return (bool)GetValue(IsErrorHintVisibleProperty); }
+            set { SetValue(IsErrorHintVisibleProperty, value); }
         }
 
         #endregion

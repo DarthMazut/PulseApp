@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using MochaCore.Navigation;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,15 @@ namespace ViewModels
         {
             Logger.LogInfo("Music selected");
             _navigationData.MediumSelection = MediumSelection.Music;
-            return Navigator.NavigateAsync(AppPages.QuickDownloadSummaryPage.Module, _navigationData);
+            
+            FormatSelection? formatSelection = ResolveAudioFormatSelection();
+            if (formatSelection is not null)
+            {
+                _navigationData.FormatSelection = formatSelection;
+                return Navigator.NavigateAsync(AppPages.QuickDownloadSummaryPage.Module, _navigationData);
+            }
+
+            return Task.CompletedTask;
         }
 
         public Task GoBackRequested()
@@ -51,6 +60,18 @@ namespace ViewModels
             {
                 _navigationData = data;
             }
+        }
+
+        private FormatSelection? ResolveAudioFormatSelection()
+        {
+            FormatInfo? highestAudioFormat = _navigationData.Metadata.FormatTable?.GetHighestAudioQuality();
+            if (highestAudioFormat is not null)
+            {
+                return FormatSelection.FromAudioFormat(highestAudioFormat);
+            }
+
+            Logger.LogFatal($"Couldn't resolve highest audio quality for: {_navigationData.Metadata.VideoUrl}");
+            return null;
         }
     }
 }

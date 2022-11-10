@@ -70,10 +70,10 @@ namespace ViewModels
         {
             Logger.LogInfo($"Navigated to {GetType().Name}");
 
-            if (navigationData.Data is QuickDownloadNavigationData data && data.QuickDownloadSummary is not null)
+            if (navigationData.Data is QuickDownloadNavigationData data)
             {
                 _navigationData = data;
-                Title = data.QuickDownloadSummary.TargetFileName;
+                Title = data.TargetFileName;
                 RawImage = await data.DownloadRawImageAsJpeg();
 
                 ISettingsSectionProvider<ApplicationSettings> sectionProvider = SettingsManager.Retrieve<ApplicationSettings>(ApplicationSettings.ID);
@@ -83,10 +83,10 @@ namespace ViewModels
                 
                 DownloadJob downloadJob = new()
                 {
-                    Url = data.QuickDownloadSummary.Url,
+                    Url = data.Metadata.VideoUrl,
                     Selection = data.FormatSelection,
-                    OutputDirectory = data.QuickDownloadSummary.OutputDirectory,
-                    DownloadedFileName = data.QuickDownloadSummary.TargetFileName,
+                    OutputDirectory = data.OutputDirectory,
+                    DownloadedFileName = data.TargetFileName,
                     CancellationToken = _cts.Token,
                     ProgressCallback = new Progress<DownloadProgress>(DownloadProgressReceived)
                 };
@@ -174,7 +174,7 @@ namespace ViewModels
         [RelayCommand]
         private void OpenFolder()
         {
-            string folderToBeOpened = _navigationData.QuickDownloadSummary.OutputDirectory.FullName;
+            string folderToBeOpened = _navigationData.OutputDirectory.FullName;
             Logger.LogInfo($"Open folder clicked: {folderToBeOpened}");
 
             try

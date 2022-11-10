@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ViewModels.Logging;
 
 namespace ViewModels
 {
@@ -22,11 +23,11 @@ namespace ViewModels
 
         public MediumSelection MediumSelection { get; set; }
 
-        public FormatInfo? SelectedVideoFormat { get; set; }
-
         public FormatSelection? FormatSelection { get; set; }
 
-        public QuickDownloadSummary? QuickDownloadSummary { get; set; }
+        public string TargetFileName { get; set; }
+
+        public DirectoryInfo OutputDirectory { get; set; }
 
         public Task<byte[]?> DownloadRawImageAsJpeg()
         {
@@ -47,6 +48,7 @@ namespace ViewModels
             }
             catch (Exception ex) when (ex is HttpRequestException || ex is ImageFormatException)
             {
+                Logger.LogError(ex, $"Couldn't download video thumbnail from: {url}");
                 return null;
             }
         }

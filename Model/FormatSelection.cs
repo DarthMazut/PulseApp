@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Model
 {
+    /// <summary>
+    /// Encapsulates format(s) selected for download process.
+    /// </summary>
     public class FormatSelection
     {
         private FormatInfo? _videoSelection;
@@ -13,10 +16,17 @@ namespace Model
 
         private FormatSelection() { }
 
+        /// <summary>
+        /// Selected video format.
+        /// </summary>
         public FormatInfo? VideoSelection => _videoSelection;
 
+        /// <summary>
+        /// Selected audio format.
+        /// </summary>
         public FormatInfo? AudioSelection => _audioSelection;
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             if (VideoSelection is null)
@@ -32,6 +42,10 @@ namespace Model
             return $"{VideoSelection.Id}+{AudioSelection.Id}";
         }
 
+        /// <summary>
+        /// Returns new instance of the <see cref="FormatSelection"/> class encapsulating given audio format.
+        /// </summary>
+        /// <param name="audioFormat">Selected audio format.</param>
         public static FormatSelection FromAudioFormat(FormatInfo audioFormat)
         {
             return new FormatSelection()
@@ -40,6 +54,10 @@ namespace Model
             };
         }
 
+        /// <summary>
+        /// Returns new instance of the <see cref="FormatSelection"/> class encapsulating given video format.
+        /// </summary>
+        /// <param name="videoFormat">Selected video format.</param>
         public static FormatSelection FromVideoFormat(FormatInfo videoFormat)
         {
             return new FormatSelection()
@@ -48,6 +66,11 @@ namespace Model
             };
         }
 
+        /// <summary>
+        /// Returns new instance of the <see cref="FormatSelection"/> class encapsulating given audio and video format.
+        /// </summary>
+        /// <param name="audioFormat">Selected audio format.</param>
+        /// <param name="videoFormat">Selected video format.</param>
         public static FormatSelection FromAudioVideoFormat(FormatInfo audioFormat, FormatInfo videoFormat)
         {
             return new FormatSelection()

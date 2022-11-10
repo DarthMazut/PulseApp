@@ -87,22 +87,15 @@
                         <Border CornerRadius="10" MaxWidth="600" Margin="20">
                             <Image Source="{Binding RawImage, Converter={StaticResource RawImageConverter}}" Stretch="Uniform" />
                         </Border>
-                        <TextBlock Text="{Binding DownloadSummary.Title}" Style="{StaticResource TitleTextStyle}" HorizontalAlignment="Center"/>
+                        <TextBlock Text="{Binding DetailsTableViewModel.Title}" Style="{StaticResource TitleTextStyle}" HorizontalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
-                
-                 <!-- DETAILS TABLE -->
-                <controls:QuickDownloadDetailTable 
-                    Margin="20"
-                    VerticalAlignment="Center"
-                    TableData="{Binding DownloadSummary}"
-                    EditOutputFolderPathCommand="{Binding EditOutputFolderCommand}"
-                    EditOutputFileNameCommand="{Binding EditTargetFileNameCommand}"
-                    />
-                
+                <!-- DETAILS TABLE -->
+                <controls:QuickDownloadDetailTable ViewModel="{Binding DetailsTableViewModel}" Margin="20" VerticalAlignment="Center" />
+
             </VariableSizedWrapGrid>
             <!-- DOWNLOAD BUTTON -->
-            <Button x:Name="xe_DownloadButton" Grid.Row="1" Command="{Binding DownloadCommand}" Style="{StaticResource DownloadButtonStyle}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="640,0,0,20">
+            <Button x:Name="xe_DownloadButton" Grid.Row="1" Command="{Binding DownloadCommand}" IsEnabled="{Binding IsDownloadAvailable}" Style="{StaticResource DownloadButtonStyle}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="640,0,0,20">
                 Download 💥
             </Button>
         </Grid>

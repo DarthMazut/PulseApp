@@ -32,6 +32,9 @@ namespace ViewModels
         [ObservableProperty]
         private IReadOnlyList<string>? _availableExtensions;
 
+        [ObservableProperty]
+        private IReadOnlyList<ResolutionInfo>? _availableResolutions;
+
         public string? SelectedExtension
         {
             get => _selectedExtension;
@@ -43,9 +46,6 @@ namespace ViewModels
                 }
             }
         }
-
-        [ObservableProperty]
-        private IReadOnlyList<ResolutionInfo>? _availableResolutions;
 
         public ResolutionInfo? SelectedResolution
         {
@@ -77,10 +77,10 @@ namespace ViewModels
                 _quickDownloadData = data;
                 AvailableExtensions = data.Metadata.FormatTable?.GetAvailableVideoExtensions();
 
-                if (data.SelectedVideoFormat is not null)
+                if (data.FormatSelection?.VideoSelection is not null)
                 {
-                    SelectedExtension = data.SelectedVideoFormat.Extension;
-                    SelectedResolution = data.SelectedVideoFormat.VideoDetails?.Resolution;
+                    SelectedExtension = data.FormatSelection.VideoSelection.Extension;
+                    SelectedResolution = data.FormatSelection.VideoSelection.VideoDetails?.Resolution;
                 }
             }
         }
@@ -88,13 +88,46 @@ namespace ViewModels
         [RelayCommand]
         private Task Done()
         {
-            _quickDownloadData.SelectedVideoFormat = _quickDownloadData.Metadata.FormatTable?
-                .GetOnlyExtensions(SelectedExtension!)
-                .GetOnlyResolution(SelectedResolution!)
-                .GetHighestVideoQuality();
+            if (_quickDownloadData is not null)
+            {
+                _quickDownloadData.FormatSelection = ResolveVideoFormatSelection();
+                Logger.LogInfo($"Done clicked; selected format: {_quickDownloadData.FormatSelection}");
+                return Navigator.NavigateAsync(AppPages.QuickDownloadSummaryPage.Module, _quickDownloadData);
+            }
 
-            Logger.LogInfo($"Done clicked; selected format: {_quickDownloadData.SelectedVideoFormat.Id}");
-            return Navigator.NavigateAsync(AppPages.QuickDownloadSummaryPage.Module, _quickDownloadData);
+            Logger.LogError($"_quickDownloadData was null in {GetType().Name}");
+            return Task.CompletedTask;
+
+        }
+
+        private FormatSelection ResolveVideoFormatSelection()
+        {
+            FormatTable filteredTable = _quickDownloadData!.Metadata.FormatTable
+                .GetOnlyExtensions(SelectedExtension!)
+                .GetOnlyResolution(SelectedResolution!);
+
+            FormatInfo? bestMergedFormat = filteredTable
+                .GetOnlyTypes(FormatType.Merged)
+                .GetHighestVideoQuality();
+            
+            FormatInfo? bestAudioFormat;
+            FormatInfo? bestVideoFormat;
+
+            if (bestMergedFormat is null)
+            {
+                bestVideoFormat = filteredTable.GetHighestVideoQuality();
+                bestAudioFormat = _quickDownloadData!.Metadata.FormatTable.ResolveBestAudioFormatForExtension(SelectedExtension!);
+
+                if (bestAudioFormat is null || bestVideoFormat is null)
+                {
+                    Logger.LogFatal($"Couldn't resolve best quality for given extension and resolution for: {_quickDownloadData!.Metadata.VideoUrl}");
+                    throw new InvalidOperationException("Couldn't resolve best quality for given extension and resolution.");
+                }
+
+                return FormatSelection.FromAudioVideoFormat(bestAudioFormat, bestVideoFormat);
+            }
+
+            return FormatSelection.FromVideoFormat(bestMergedFormat); 
         }
 
         private void OnSelectedExtensionChanged()
@@ -105,6 +138,8 @@ namespace ViewModels
                 IsAvailableResolutionsComboBoxEnabled = true;
                 AvailableResolutions = _quickDownloadData?.Metadata.FormatTable?.GetOnlyExtensions(SelectedExtension).GetAvailableVideoResolutions();
             }
+
+            IsDoneButtonEnabled = SelectedResolution is not null;
         }
 
         private void OnSelectedResolutionChanged()

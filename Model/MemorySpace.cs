@@ -109,6 +109,16 @@ namespace Model
         {
             return new MemorySpace(x.Bytes - y.Bytes);
         }
+
+        public static bool operator >(MemorySpace x, MemorySpace y)
+        {
+            return x.Bytes > y.Bytes;
+        }
+
+        public static bool operator <(MemorySpace x, MemorySpace y)
+        {
+            return (x.Bytes < y.Bytes);
+        }
     }
 
     public enum MemoryUnit

@@ -12,65 +12,72 @@
     Padding="10">
     <UserControl.Resources>
         <local:QuickDownloadDetailsTableVisibilityConverter x:Key="TableItemVisibilityConverter" />
+        <local:BoolToParameterValueConverter x:Key="BoolToParameterConverter" />
     </UserControl.Resources>
     
-    <ScrollViewer DataContext="{Binding ElementName=thisControl}" HorizontalScrollMode="Disabled">
+    <ScrollViewer DataContext="{Binding ViewModel, ElementName=thisControl}" HorizontalScrollMode="Disabled">
         <StackPanel Margin="15,0,15,0">
             <controls:QuickDownloadDetailItem 
                 HeaderText="Media Type:"
-                ValueText="{Binding TableData.MediumSelection}"
+                ValueText="{Binding MediumSelection}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="File size:"
-                ValueText="{Binding TableData.FileSize}"
+                ValueText="{Binding FileSize}"
+                IsValueHintVisible="{Binding IsEstimatedSize}"
+                ValueHintText="This value was estimated"
+                IsErrorHintVisible="{Binding HasSufficientSpace, Converter={StaticResource NegationConverter}}"
+                ErrorHintText="Not sufficient space on target volume."
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Duration:"
-                ValueText="{Binding TableData.Duration}"
+                ValueText="{Binding Duration}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Source format:"
-                ValueText="{Binding TableData.SourceFormat}"
+                ValueText="{Binding SourceFormat}"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Target format:"
-                ValueText="{Binding TableData.TargetFormat}"
+                ValueText="{Binding TargetFormat}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Resolution:"
-                ValueText="{Binding TableData.Resolution}"
-                Visibility="{Binding TableData.MediumSelection, Converter={StaticResource TableItemVisibilityConverter}, ConverterParameter=Video}"
+                ValueText="{Binding Resolution}"
+                Visibility="{Binding MediumSelection, Converter={StaticResource TableItemVisibilityConverter}, ConverterParameter=Video}"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Sampling rate:"
-                ValueText="{Binding TableData.Rate}"
-                Visibility="{Binding TableData.MediumSelection, Converter={StaticResource TableItemVisibilityConverter}, ConverterParameter=Music}"
+                ValueText="{Binding Rate}"
+                Visibility="{Binding MediumSelection, Converter={StaticResource TableItemVisibilityConverter}, ConverterParameter=Music}"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Codec:"
-                ValueText="{Binding TableData.Codec}"
+                ValueText="{Binding Codec}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Link:"
-                ValueText="{Binding TableData.Url}"
-                HyperlinkUri="{Binding TableData.Url}"
+                ValueText="{Binding Url}"
+                HyperlinkUri="{Binding Url}"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Output folder:"
-                ValueText="{Binding TableData.OutputDirectory}"
+                ValueText="{Binding OutputDirectory}"
                 ActionButtonIcon="&#xED25;"
-                ActionButtonCommand="{Binding EditOutputFolderPathCommand}"
+                ActionButtonCommand="{Binding EditOutputFolderCommand}"
                 Background="#2A2A2A"
                 />
             <controls:QuickDownloadDetailItem 
                 HeaderText="Output file name:"
-                ValueText="{Binding TableData.TargetFileName}"
+                ValueText="{Binding TargetFileName}"
+                IsErrorHintVisible="{Binding IsTargetFileNameExist}"
+                ErrorHintText="File already exists in selected location"
                 ActionButtonIcon="&#xE70F;"
-                ActionButtonCommand="{Binding EditOutputFileNameCommand}"
+                ActionButtonCommand="{Binding EditTargetFileNameCommand}"
                 />
         </StackPanel>
     </ScrollViewer>

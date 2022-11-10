@@ -42,6 +42,7 @@
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <TextBlock Text="{Binding HeaderText}" Style="{StaticResource HeaderStyle}"/>
         <RelativePanel Grid.Column="2" VerticalAlignment="Center">
@@ -52,12 +53,13 @@
                 RelativePanel.AlignVerticalCenterWith="xe_ValueTextBox"
                 Margin="-25,0,0,0"
                 Glyph="&#xE946;" 
-                Visibility="{Binding ValueHintText, Converter={StaticResource NullableToVisibilityConverter}}" 
+                Visibility="{Binding IsValueHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}" 
                 Foreground="{ThemeResource InfoBarInformationalSeverityIconBackground}" 
                 ToolTipService.ToolTip="{Binding ValueHintText}"
                 />
         </RelativePanel>
-        <Button Grid.Column="3" Visibility="{Binding ActionButtonIcon, Converter={StaticResource NullableToVisibilityConverter}}"  Command="{Binding ActionButtonCommand}">
+        <FontIcon Grid.Column="3" Margin="10,0,10,-2" FontSize="24" Glyph="&#xE783;" Foreground="{ThemeResource InfoBarErrorSeverityIconBackground}" Visibility="{Binding IsErrorHintVisible, Converter={StaticResource BooleanToVisibilityConverter}}" ToolTipService.ToolTip="{Binding ErrorHintText}" />
+        <Button Grid.Column="4" Visibility="{Binding ActionButtonIcon, Converter={StaticResource NullableToVisibilityConverter}}" Command="{Binding ActionButtonCommand}">
             <FontIcon Glyph="{Binding ActionButtonIcon}"/>
         </Button>
     </Grid>

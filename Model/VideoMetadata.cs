@@ -20,7 +20,7 @@ namespace Model
         private DateTimeOffset? _uploadDate;
         private string _chanelName;
         private long _views;
-        private FormatTable? _formatTable;
+        private FormatTable _formatTable;
 
         private VideoMetadata() { }
 
@@ -67,7 +67,7 @@ namespace Model
         /// <summary>
         /// Available formats for this video.
         /// </summary>
-        public FormatTable? FormatTable => _formatTable;
+        public FormatTable FormatTable => _formatTable;
 
         /// <summary>
         /// Returns new instacne of the <see cref="VideoMetadata"/> class based on provided

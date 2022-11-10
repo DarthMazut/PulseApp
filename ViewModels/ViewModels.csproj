@@ -21,4 +21,10 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Navigation\" />
+    <Folder Include="Utils\" />
+    <Folder Include="Pages\" />
+  </ItemGroup>
+
 </Project>

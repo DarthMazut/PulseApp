@@ -203,16 +203,11 @@ namespace Model
             return null;
         }
 
-        public static FormatTable? FromDto(IReadOnlyList<FormatDto> formats)
+        public static FormatTable FromDto(IReadOnlyList<FormatDto> formats)
         {
-            if (formats?.Any() != true)
-            {
-                return null;
-            }
-
             return new FormatTable()
             {
-                _aviableFormats = formats.Select(f => FormatInfo.FromRecord(f)).ToList().AsReadOnly()
+                _aviableFormats = formats?.Select(f => FormatInfo.FromRecord(f)).ToList().AsReadOnly() ?? new List<FormatInfo>().AsReadOnly()
             };
         }
     }
